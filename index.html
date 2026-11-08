@@ -11,11 +11,12 @@
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#0f172a',
-                        cardBg: '#1e293b',
-                        primary: '#6366f1',
-                        primaryHover: '#4f46e5',
-                        accent: '#8b5cf6'
+                        lightBg: '#f8fafc',
+                        cardBg: '#ffffff',
+                        primaryBlue: '#2563eb',
+                        primaryBlueHover: '#1d4ed8',
+                        accentRed: '#dc2626',
+                        accentRedHover: '#b91c1c'
                     }
                 }
             }
@@ -23,32 +24,32 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
-        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f1f5f9; color: #1e293b; }
         .hidden-section { display: none !important; }
     </style>
 </head>
-<body class="min-height-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
 
     <!-- Notification Toast -->
-    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 hidden px-6 py-3 rounded-xl shadow-lg text-white font-semibold transition-all duration-300"></div>
+    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 hidden px-6 py-3 rounded-xl shadow-xl text-white font-semibold transition-all duration-300"></div>
 
     <!-- MAIN CONTAINER -->
     <main class="flex-grow container mx-auto px-4 py-6 max-w-5xl">
 
         <!-- 1. الشاشة الرئيسية -->
         <section id="homeScreen" class="flex flex-col items-center justify-center min-h-[80vh] text-center">
-            <div class="bg-cardBg p-8 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full">
-                <div class="w-20 h-20 bg-indigo-600/20 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl font-black shadow-inner">
+            <div class="bg-cardBg p-8 rounded-3xl shadow-xl border border-slate-200 max-w-md w-full">
+                <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl font-black shadow-inner">
                     QM
                 </div>
-                <h1 class="text-3xl font-black mb-2 text-white">Quiz Master 2.0</h1>
-                <p class="text-slate-400 mb-8 text-sm">منصة الاختبارات والمسابقات الذكية والآمنة</p>
+                <h1 class="text-3xl font-black mb-2 text-slate-900">Quiz Master 2.0</h1>
+                <p class="text-slate-500 mb-8 text-sm">منصة الاختبارات والمسابقات الذكية والآمنة</p>
                 
                 <div class="space-y-4">
-                    <button onclick="showSection('studentAuthScreen')" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+                    <button onclick="showSection('studentAuthScreen')" class="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
                         <span>تسجيل / دخول كطالب</span>
                     </button>
-                    <button onclick="showSection('adminLoginScreen')" class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-bold rounded-xl transition flex items-center justify-center gap-2">
+                    <button onclick="showSection('adminLoginScreen')" class="w-full py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl transition shadow-lg flex items-center justify-center gap-2">
                         <span>دخول الأدمن</span>
                     </button>
                 </div>
@@ -57,169 +58,169 @@
 
         <!-- 2. شاشة مصادقة الطالب -->
         <section id="studentAuthScreen" class="hidden-section flex flex-col items-center justify-center min-h-[80vh]">
-            <div class="bg-cardBg p-8 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full">
+            <div class="bg-cardBg p-8 rounded-3xl shadow-xl border border-slate-200 max-w-md w-full">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-black text-white">حساب الطالب</h2>
-                    <button onclick="showSection('homeScreen')" class="text-slate-400 hover:text-white text-sm">الرئيسية ⟵</button>
+                    <h2 class="text-2xl font-black text-slate-900">حساب الطالب</h2>
+                    <button onclick="showSection('homeScreen')" class="text-slate-500 hover:text-blue-600 text-sm font-bold">الرئيسية ⟵</button>
                 </div>
-                <div class="flex bg-slate-900 p-1 rounded-xl mb-6">
-                    <button id="tabLoginBtn" onclick="switchStudentTab('login')" class="flex-1 py-2 rounded-lg font-bold text-sm transition bg-indigo-600 text-white">تسجيل الدخول</button>
-                    <button id="tabRegisterBtn" onclick="switchStudentTab('register')" class="flex-1 py-2 rounded-lg font-bold text-sm transition text-slate-400">حساب جديد</button>
+                <div class="flex bg-slate-100 p-1.5 rounded-2xl mb-6">
+                    <button id="tabLoginBtn" onclick="switchStudentTab('login')" class="flex-1 py-2 rounded-xl font-bold text-sm transition bg-blue-600 text-white shadow-sm">تسجيل الدخول</button>
+                    <button id="tabRegisterBtn" onclick="switchStudentTab('register')" class="flex-1 py-2 rounded-xl font-bold text-sm transition text-slate-600">حساب جديد</button>
                 </div>
                 <form id="studentLoginForm" onsubmit="handleStudentLogin(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">البريد الإلكتروني</label>
-                        <input type="email" id="studentLoginEmail" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 text-white text-sm">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">البريد الإلكتروني</label>
+                        <input type="email" id="studentLoginEmail" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">كلمة المرور</label>
-                        <input type="password" id="studentLoginPassword" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 text-white text-sm">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">كلمة المرور</label>
+                        <input type="password" id="studentLoginPassword" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 text-sm">
                     </div>
-                    <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl text-white transition shadow-lg">دخول</button>
+                    <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 font-bold rounded-xl text-white transition shadow-lg shadow-blue-600/20">دخول</button>
                 </form>
                 <form id="studentRegisterForm" onsubmit="handleStudentRegister(event)" class="space-y-4 hidden-section">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">الاسم الكامل</label>
-                        <input type="text" id="studentRegName" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 text-white text-sm">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">الاسم الكامل</label>
+                        <input type="text" id="studentRegName" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">البريد الإلكتروني</label>
-                        <input type="email" id="studentRegEmail" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 text-white text-sm">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">البريد الإلكتروني</label>
+                        <input type="email" id="studentRegEmail" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">كلمة المرور</label>
-                        <input type="password" id="studentRegPassword" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 text-white text-sm">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">كلمة المرور</label>
+                        <input type="password" id="studentRegPassword" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 text-sm">
                     </div>
-                    <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-bold rounded-xl text-white transition shadow-lg">إنشاء الحساب</button>
+                    <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 font-bold rounded-xl text-white transition shadow-lg shadow-red-600/20">إنشاء الحساب</button>
                 </form>
             </div>
         </section>
 
         <!-- 3. شاشة دخول الأدمن -->
         <section id="adminLoginScreen" class="hidden-section flex flex-col items-center justify-center min-h-[80vh]">
-            <div class="bg-cardBg p-8 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full">
+            <div class="bg-cardBg p-8 rounded-3xl shadow-xl border border-slate-200 max-w-md w-full">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-black text-white">لوحة تحكم الأدمن</h2>
-                    <button onclick="showSection('homeScreen')" class="text-slate-400 hover:text-white text-sm">الرئيسية ⟵</button>
+                    <h2 class="text-2xl font-black text-slate-900">لوحة تحكم الأدمن</h2>
+                    <button onclick="showSection('homeScreen')" class="text-slate-500 hover:text-blue-600 text-sm font-bold">الرئيسية ⟵</button>
                 </div>
                 <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">البريد الإلكتروني للأدمن</label>
-                        <input type="email" id="adminEmailInput" value="abdelrhmanahmed12031@gmail.com" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 text-white text-sm">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">البريد الإلكتروني للأدمن</label>
+                        <input type="email" id="adminEmailInput" value="abdelrhmanahmed12031@gmail.com" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">كلمة المرور</label>
-                        <input type="password" id="adminPasswordInput" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 text-white text-sm">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">كلمة المرور</label>
+                        <input type="password" id="adminPasswordInput" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 text-sm">
                     </div>
-                    <button type="submit" class="w-full py-3 bg-purple-600 hover:bg-purple-500 font-bold rounded-xl text-white transition shadow-lg">دخول كأدمن</button>
+                    <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-700 font-bold rounded-xl text-white transition shadow-lg shadow-red-600/20">دخول كأدمن</button>
                 </form>
             </div>
         </section>
 
         <!-- 4. لوحة تحكم الطالب -->
         <section id="studentDashboard" class="hidden-section space-y-6">
-            <header class="flex justify-between items-center bg-cardBg p-4 rounded-2xl border border-slate-700 shadow-md">
+            <header class="flex justify-between items-center bg-cardBg p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
-                    <h2 id="studentWelcomeName" class="text-lg font-bold text-white">أهلاً بك</h2>
-                    <p class="text-xs text-slate-400">لوحة تحكم الطالب</p>
+                    <h2 id="studentWelcomeName" class="text-lg font-bold text-slate-900">أهلاً بك</h2>
+                    <p class="text-xs text-slate-500">لوحة تحكم الطالب</p>
                 </div>
-                <button onclick="logoutUser()" class="px-4 py-2 bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white text-xs font-bold rounded-xl transition">تسجيل الخروج</button>
+                <button onclick="logoutUser()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition border border-red-200">تسجيل الخروج</button>
             </header>
-            <div class="flex gap-2 bg-cardBg p-1.5 rounded-xl border border-slate-700">
-                <button onclick="switchStudentPanel('availableExams')" id="btnAvailableExams" class="flex-1 py-2 text-xs font-bold rounded-lg bg-indigo-600 text-white transition">الاختبارات المتاحة</button>
-                <button onclick="switchStudentPanel('studentResults')" id="btnStudentResults" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 transition">نتائجي والإجابات</button>
+            <div class="flex gap-2 bg-cardBg p-1.5 rounded-2xl border border-slate-200 shadow-sm">
+                <button onclick="switchStudentPanel('availableExams')" id="btnAvailableExams" class="flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm">الاختبارات المتاحة</button>
+                <button onclick="switchStudentPanel('studentResults')" id="btnStudentResults" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 transition">نتائجي والإجابات</button>
             </div>
             <div id="panelAvailableExams" class="space-y-4">
-                <h3 class="text-base font-bold text-slate-200">الاختبارات الجاهزة للحل</h3>
+                <h3 class="text-base font-bold text-slate-800">الاختبارات الجاهزة للحل</h3>
                 <div id="availableExamsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
             <div id="panelStudentResults" class="hidden-section space-y-4">
-                <h3 class="text-base font-bold text-slate-200">سجل الاختبارات والنتائج</h3>
+                <h3 class="text-base font-bold text-slate-800">سجل الاختبارات والنتائج</h3>
                 <div id="studentResultsList" class="space-y-3"></div>
             </div>
         </section>
 
         <!-- 5. نافذة حل الاختبار -->
         <section id="examTakingScreen" class="hidden-section space-y-6">
-            <div class="bg-cardBg p-6 rounded-2xl border border-slate-700 flex justify-between items-center sticky top-4 z-40 shadow-xl">
+            <div class="bg-cardBg p-6 rounded-2xl border border-slate-200 flex justify-between items-center sticky top-4 z-40 shadow-lg">
                 <div>
-                    <h2 id="activeExamTitle" class="text-lg font-black text-white">عنوان الاختبار</h2>
-                    <p id="activeExamDesc" class="text-xs text-slate-400">وصف الاختبار</p>
+                    <h2 id="activeExamTitle" class="text-lg font-black text-slate-900">عنوان الاختبار</h2>
+                    <p id="activeExamDesc" class="text-xs text-slate-500">وصف الاختبار</p>
                 </div>
-                <div class="bg-indigo-600/20 border border-indigo-500/30 px-4 py-2 rounded-xl text-indigo-300 font-mono font-bold text-sm" id="examTimer">00:00</div>
+                <div class="bg-blue-50 border border-blue-200 px-4 py-2 rounded-xl text-blue-600 font-mono font-bold text-sm" id="examTimer">00:00</div>
             </div>
             <form id="examForm" onsubmit="submitExamAnswers(event)" class="space-y-6">
                 <div id="examQuestionsContainer" class="space-y-6"></div>
-                <button type="submit" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 font-black text-white rounded-2xl shadow-xl transition">تسجيل وإرسال الإجابات</button>
+                <button type="submit" class="w-full py-4 bg-blue-600 hover:bg-blue-700 font-black text-white rounded-2xl shadow-xl shadow-blue-600/20 transition">تسجيل وإرسال الإجابات</button>
             </form>
         </section>
 
         <!-- 6. لوحة تحكم الأدمن -->
         <section id="adminDashboard" class="hidden-section space-y-6">
-            <header class="flex justify-between items-center bg-cardBg p-4 rounded-2xl border border-slate-700 shadow-md">
+            <header class="flex justify-between items-center bg-cardBg p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
-                    <h2 class="text-lg font-bold text-white">لوحة تحكم الأدمن</h2>
-                    <p class="text-xs text-purple-400">إدارة النظام والاختبارات والتصحيح</p>
+                    <h2 class="text-lg font-bold text-slate-900">لوحة تحكم الأدمن</h2>
+                    <p class="text-xs text-red-600 font-bold">إدارة النظام والاختبارات والتصحيح</p>
                 </div>
-                <button onclick="logoutUser()" class="px-4 py-2 bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white text-xs font-bold rounded-xl transition">خروج</button>
+                <button onclick="logoutUser()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition border border-red-200">خروج</button>
             </header>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                <button onclick="switchAdminTab('create')" id="adminTabCreateBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-purple-600 text-white transition">إنشاء اختبار</button>
-                <button onclick="switchAdminTab('active')" id="adminTabActiveBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-800 text-slate-300 transition">الاختبارات النشطة</button>
-                <button onclick="switchAdminTab('archived')" id="adminTabArchivedBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-800 text-slate-300 transition">الاختبارات المنتهية</button>
-                <button onclick="switchAdminTab('grading')" id="adminTabGradingBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-800 text-slate-300 transition">تصحيح الإجابات</button>
+                <button onclick="switchAdminTab('create')" id="adminTabCreateBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm">إنشاء اختبار</button>
+                <button onclick="switchAdminTab('active')" id="adminTabActiveBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">الاختبارات النشطة</button>
+                <button onclick="switchAdminTab('archived')" id="adminTabArchivedBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">الاختبارات المنتهية</button>
+                <button onclick="switchAdminTab('grading')" id="adminTabGradingBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">تصحيح الإجابات</button>
             </div>
-            <div id="adminPanelCreate" class="bg-cardBg p-6 rounded-2xl border border-slate-700 space-y-6">
-                <h3 class="text-base font-bold text-white border-b border-slate-700 pb-3">إنشاء اختبار جديد وإضافة الأسئلة</h3>
+            <div id="adminPanelCreate" class="bg-cardBg p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">إنشاء اختبار جديد وإضافة الأسئلة</h3>
                 <div class="space-y-4">
-                    <input type="text" id="newExamTitle" placeholder="عنوان الاختبار" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm">
-                    <textarea id="newExamDesc" placeholder="وصف الاختبار والتعليمات" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm"></textarea>
-                    <input type="number" id="newExamDuration" placeholder="المدة بالدقائق (مثال: 30)" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm">
+                    <input type="text" id="newExamTitle" placeholder="عنوان الاختبار" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600">
+                    <textarea id="newExamDesc" placeholder="وصف الاختبار والتعليمات" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600"></textarea>
+                    <input type="number" id="newExamDuration" placeholder="المدة بالدقائق (مثال: 30)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600">
                 </div>
-                <div class="border-t border-slate-700 pt-6 space-y-4">
-                    <h4 class="text-sm font-bold text-purple-300">أضف سؤالاً للمسودة</h4>
-                    <select id="questionTypeSelect" onchange="toggleQuestionInputs()" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm">
+                <div class="border-t border-slate-100 pt-6 space-y-4">
+                    <h4 class="text-sm font-bold text-blue-600">أضف سؤالاً للمسودة</h4>
+                    <select id="questionTypeSelect" onchange="toggleQuestionInputs()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600">
                         <option value="mcq">اختيار من متعدد (MCQ)</option>
                         <option value="essay">سؤال مقالي (Essay)</option>
                     </select>
-                    <input type="text" id="qText" placeholder="نص السؤال" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm">
-                    <input type="number" id="qDegree" placeholder="درجة السؤال" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-sm">
+                    <input type="text" id="qText" placeholder="نص السؤال" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600">
+                    <input type="number" id="qDegree" placeholder="درجة السؤال" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600">
                     <div id="mcqOptionsContainer" class="space-y-2">
-                        <input type="text" id="opt1" placeholder="الخيار الأول" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white">
-                        <input type="text" id="opt2" placeholder="الخيار الثاني" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white">
-                        <input type="text" id="opt3" placeholder="الخيار الثالث" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white">
-                        <input type="text" id="opt4" placeholder="الخيار الرابع" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white">
-                        <select id="correctOptIndex" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white">
+                        <input type="text" id="opt1" placeholder="الخيار الأول" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-600">
+                        <input type="text" id="opt2" placeholder="الخيار الثاني" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-600">
+                        <input type="text" id="opt3" placeholder="الخيار الثالث" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-600">
+                        <input type="text" id="opt4" placeholder="الخيار الرابع" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-600">
+                        <select id="correctOptIndex" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-600">
                             <option value="0">الإجابة الصحيحة: الخيار الأول</option>
                             <option value="1">الإجابة الصحيحة: الخيار الثاني</option>
                             <option value="2">الإجابة الصحيحة: الخيار الثالث</option>
                             <option value="3">الإجابة الصحيحة: الخيار الرابع</option>
                         </select>
-                        <input type="text" id="qExplanation" placeholder="تفسير أو شرح الإجابة الصحيحة (اختياري)" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white">
+                        <input type="text" id="qExplanation" placeholder="تفسير أو شرح الإجابة الصحيحة (اختياري)" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-600">
                     </div>
-                    <button onclick="addQuestionToDraft()" class="py-2.5 px-5 bg-slate-800 hover:bg-slate-700 text-purple-300 font-bold rounded-xl text-xs border border-purple-500/30">إضافة السؤال للمسودة</button>
+                    <button type="button" onclick="addQuestionToDraft()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs border border-slate-200 transition">إضافة السؤال للمسودة</button>
                 </div>
-                <div class="border-t border-slate-700 pt-4">
-                    <h5 class="text-xs font-bold text-slate-400 mb-2">الأسئلة في المسودة الحالية (<span id="draftCount">0</span>)</h5>
+                <div class="border-t border-slate-100 pt-4">
+                    <h5 class="text-xs font-bold text-slate-500 mb-2">الأسئلة في المسودة الحالية (<span id="draftCount">0</span>)</h5>
                     <div id="draftQuestionsList" class="space-y-2 mb-4"></div>
-                    <button onclick="publishExam()" class="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl shadow-lg transition">نشر الاختبار للطلاب</button>
+                    <button type="button" onclick="publishExam()" class="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-lg shadow-red-600/20 transition">نشر الاختبار للطلاب</button>
                 </div>
             </div>
-            <div id="adminPanelActive" class="hidden-section bg-cardBg p-6 rounded-2xl border border-slate-700 space-y-4">
-                <h3 class="text-base font-bold text-white">الاختبارات المنشورة الحالية</h3>
+            <div id="adminPanelActive" class="hidden-section bg-cardBg p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-base font-bold text-slate-900">الاختبارات المنشورة الحالية</h3>
                 <div id="adminActiveExamsList" class="space-y-3"></div>
             </div>
-            <div id="adminPanelArchived" class="hidden-section bg-cardBg p-6 rounded-2xl border border-slate-700 space-y-4">
-                <h3 class="text-base font-bold text-white">أرشيف الاختبارات المنتهية</h3>
+            <div id="adminPanelArchived" class="hidden-section bg-cardBg p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-base font-bold text-slate-900">أرشيف الاختبارات المنتهية</h3>
                 <div id="adminArchivedExamsList" class="space-y-3"></div>
             </div>
-            <div id="adminPanelGrading" class="hidden-section bg-cardBg p-6 rounded-2xl border border-slate-700 space-y-4">
-                <h3 class="text-base font-bold text-white">إجابات وتسليمات الطلاب</h3>
+            <div id="adminPanelGrading" class="hidden-section bg-cardBg p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-base font-bold text-slate-900">إجابات وتسليمات الطلاب</h3>
                 <div id="adminSubmissionsList" class="space-y-3"></div>
             </div>
         </section>
     </main>
-    <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800">
+    <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-200 bg-white">
         Quiz Master 2.0 &copy; 2026 - جميع الحقوق محفوظة
     </footer>
     <script type="module">
@@ -267,7 +268,7 @@
             const toast = document.getElementById('toast');
             if(!toast) return;
             toast.textContent = message;
-            toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-semibold transition-all duration-300 ${isError ? 'bg-rose-600' : 'bg-emerald-600'}`;
+            toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-2xl shadow-xl text-white font-semibold transition-all duration-300 ${isError ? 'bg-red-600' : 'bg-blue-600'}`;
             toast.classList.remove('hidden');
             setTimeout(() => toast.classList.add('hidden'), 4000);
         }
@@ -286,13 +287,13 @@
             if(tab === 'login') {
                 document.getElementById('studentLoginForm').classList.remove('hidden-section');
                 document.getElementById('studentRegisterForm').classList.add('hidden-section');
-                document.getElementById('tabLoginBtn').className = "flex-1 py-2 rounded-lg font-bold text-sm transition bg-indigo-600 text-white";
-                document.getElementById('tabRegisterBtn').className = "flex-1 py-2 rounded-lg font-bold text-sm transition text-slate-400";
+                document.getElementById('tabLoginBtn').className = "flex-1 py-2 rounded-xl font-bold text-sm transition bg-blue-600 text-white shadow-sm";
+                document.getElementById('tabRegisterBtn').className = "flex-1 py-2 rounded-xl font-bold text-sm transition text-slate-600";
             } else {
                 document.getElementById('studentRegisterForm').classList.remove('hidden-section');
                 document.getElementById('studentLoginForm').classList.add('hidden-section');
-                document.getElementById('tabRegisterBtn').className = "flex-1 py-2 rounded-lg font-bold text-sm transition bg-emerald-600 text-white";
-                document.getElementById('tabLoginBtn').className = "flex-1 py-2 rounded-lg font-bold text-sm transition text-slate-400";
+                document.getElementById('tabRegisterBtn').className = "flex-1 py-2 rounded-xl font-bold text-sm transition bg-red-600 text-white shadow-sm";
+                document.getElementById('tabLoginBtn').className = "flex-1 py-2 rounded-xl font-bold text-sm transition text-slate-600";
             }
         }
 
@@ -382,14 +383,14 @@
             if(panel === 'availableExams') {
                 document.getElementById('panelAvailableExams').classList.remove('hidden-section');
                 document.getElementById('panelStudentResults').classList.add('hidden-section');
-                document.getElementById('btnAvailableExams').className = "flex-1 py-2 text-xs font-bold rounded-lg bg-indigo-600 text-white transition";
-                document.getElementById('btnStudentResults').className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 transition";
+                document.getElementById('btnAvailableExams').className = "flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm";
+                document.getElementById('btnStudentResults').className = "flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 transition";
                 loadStudentAvailableExams();
             } else {
                 document.getElementById('panelStudentResults').classList.remove('hidden-section');
                 document.getElementById('panelAvailableExams').classList.add('hidden-section');
-                document.getElementById('btnStudentResults').className = "flex-1 py-2 text-xs font-bold rounded-lg bg-indigo-600 text-white transition";
-                document.getElementById('btnAvailableExams').className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 transition";
+                document.getElementById('btnStudentResults').className = "flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm";
+                document.getElementById('btnAvailableExams').className = "flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 transition";
                 loadStudentResults();
             }
         }
@@ -398,10 +399,10 @@
             const tabs = ['create', 'active', 'archived', 'grading'];
             tabs.forEach(t => {
                 document.getElementById(`adminPanel${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.add('hidden-section');
-                document.getElementById(`adminTab${t.charAt(0).toUpperCase() + t.slice(1)}Btn`).className = "py-3 px-2 text-xs font-bold rounded-xl bg-slate-800 text-slate-300 transition";
+                document.getElementById(`adminTab${t.charAt(0).toUpperCase() + t.slice(1)}Btn`).className = "py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition";
             });
             document.getElementById(`adminPanel${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden-section');
-            document.getElementById(`adminTab${tab.charAt(0).toUpperCase() + tab.slice(1)}Btn`).className = "py-3 px-2 text-xs font-bold rounded-xl bg-purple-600 text-white transition";
+            document.getElementById(`adminTab${tab.charAt(0).toUpperCase() + tab.slice(1)}Btn`).className = "py-3 px-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm";
         }
 
         window.toggleQuestionInputs = function() {
@@ -446,13 +447,20 @@
             document.getElementById('draftCount').textContent = draftQuestions.length;
             
             const listEl = document.getElementById('draftQuestionsList');
-            listEl.innerHTML += `<div class="p-3 bg-slate-900 rounded-lg text-xs flex justify-between items-center border border-slate-800">
+            listEl.innerHTML += `<div class="p-3 bg-slate-50 rounded-xl text-xs flex justify-between items-center border border-slate-200">
                 <span><b>${type === 'mcq' ? 'MCQ' : 'مقالي'}:</b> ${text} (${degree} درجات)</span>
-                <span class="text-rose-400 cursor-pointer" onclick="removeDraftQuestion(${draftQuestions.length - 1})">حذف</span>
+                <span class="text-red-600 font-bold cursor-pointer" onclick="removeDraftQuestion(${draftQuestions.length - 1})">حذف</span>
             </div>`;
 
             document.getElementById('qText').value = '';
             document.getElementById('qDegree').value = '';
+            if(type === 'mcq') {
+                document.getElementById('opt1').value = '';
+                document.getElementById('opt2').value = '';
+                document.getElementById('opt3').value = '';
+                document.getElementById('opt4').value = '';
+                document.getElementById('qExplanation').value = '';
+            }
             showToast("تمت إضافة السؤال للمسودة بنجاح");
         }
 
@@ -461,9 +469,9 @@
             document.getElementById('draftCount').textContent = draftQuestions.length;
             const listEl = document.getElementById('draftQuestionsList');
             listEl.innerHTML = draftQuestions.map((q, i) => `
-                <div class="p-3 bg-slate-900 rounded-lg text-xs flex justify-between items-center border border-slate-800">
+                <div class="p-3 bg-slate-50 rounded-xl text-xs flex justify-between items-center border border-slate-200">
                     <span><b>${q.type === 'mcq' ? 'MCQ' : 'مقالي'}:</b> ${q.text} (${q.degree} درجات)</span>
-                    <span class="text-rose-400 cursor-pointer" onclick="removeDraftQuestion(${i})">حذف</span>
+                    <span class="text-red-600 font-bold cursor-pointer" onclick="removeDraftQuestion(${i})">حذف</span>
                 </div>
             `).join('');
         }
@@ -526,7 +534,7 @@
             listEl.innerHTML = '';
 
             if(!snapshot.exists()) {
-                listEl.innerHTML = '<p class="text-xs text-slate-500">لا توجد اختبارات مضافة حالياً.</p>';
+                listEl.innerHTML = '<p class="text-xs text-slate-400">لا توجد اختبارات مضافة حالياً.</p>';
                 return;
             }
 
@@ -535,12 +543,12 @@
                 const examId = childSnap.key;
                 if(exam.status === 'active') {
                     listEl.innerHTML += `
-                        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex justify-between items-center">
                             <div>
-                                <h4 class="font-bold text-sm text-white">${exam.title}</h4>
-                                <p class="text-xs text-slate-400">${exam.description || ''} | المدة: ${exam.duration} دقيقة</p>
+                                <h4 class="font-bold text-sm text-slate-900">${exam.title}</h4>
+                                <p class="text-xs text-slate-500">${exam.description || ''} | المدة: ${exam.duration} دقيقة</p>
                             </div>
-                            <button onclick="endExam('${examId}')" class="px-3 py-1.5 bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white text-xs font-bold rounded-lg transition">إنهاء وإخفاء</button>
+                            <button onclick="endExam('${examId}')" class="px-3.5 py-2 bg-red-100 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition">إنهاء وإخفاء</button>
                         </div>
                     `;
                 }
@@ -566,9 +574,9 @@
                 const exam = childSnap.val();
                 if(exam.status === 'archived') {
                     listEl.innerHTML += `
-                        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                            <h4 class="font-bold text-sm text-slate-300">${exam.title} (منتهي)</h4>
-                            <p class="text-xs text-slate-500">تم الأرشفة بنجاح مع الاحتفاظ بكافة الإجابات والنتائج السابقة.</p>
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                            <h4 class="font-bold text-sm text-slate-700">${exam.title} (منتهي)</h4>
+                            <p class="text-xs text-slate-500">تم الأرشفة بنجاح مع الاحتفاظ بكافة الإجابات والنتائج.</p>
                         </div>
                     `;
                 }
@@ -594,7 +602,7 @@
             listEl.innerHTML = '';
 
             if(!examsSnap.exists()) {
-                listEl.innerHTML = '<p class="text-xs text-slate-500">لا توجد اختبارات متاحة حالياً.</p>';
+                listEl.innerHTML = '<p class="text-xs text-slate-400">لا توجد اختبارات متاحة حالياً.</p>';
                 return;
             }
 
@@ -605,15 +613,15 @@
                 if(exam.status === 'active') {
                     const alreadyDone = submittedExams.includes(examId);
                     listEl.innerHTML += `
-                        <div class="p-5 bg-slate-900 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+                        <div class="p-5 bg-cardBg rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
                             <div>
-                                <h4 class="font-bold text-base text-white">${exam.title}</h4>
-                                <p class="text-xs text-slate-400 mt-1">${exam.description || 'لا يوجد وصف'}</p>
-                                <span class="inline-block mt-3 px-3 py-1 bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 text-xs font-bold rounded-lg">المدة: ${exam.duration} دقيقة</span>
+                                <h4 class="font-bold text-base text-slate-900">${exam.title}</h4>
+                                <p class="text-xs text-slate-500 mt-1">${exam.description || 'لا يوجد وصف'}</p>
+                                <span class="inline-block mt-3 px-3 py-1 bg-blue-50 text-blue-600 border border-blue-200 text-xs font-bold rounded-xl">المدة: ${exam.duration} دقيقة</span>
                             </div>
                             ${alreadyDone ? 
-                                '<span class="text-xs text-emerald-400 font-bold">تم تسليم الاختبار مسبقاً ✓</span>' :
-                                `<button onclick="startTakingExam('${examId}')" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition">بدء الاختبار</button>`
+                                '<span class="text-xs text-emerald-600 font-bold">تم تسليم الاختبار مسبقاً ✓</span>' :
+                                `<button onclick="startTakingExam('${examId}')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition">بدء الاختبار</button>`
                             }
                         </div>
                     `;
@@ -638,24 +646,24 @@
                 let optionsHtml = '';
                 if(q.type === 'mcq') {
                     optionsHtml = q.options.map((opt, oIdx) => `
-                        <label class="flex items-center gap-3 p-3 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer hover:border-indigo-500 transition">
-                            <input type="radio" name="q_${idx}" value="${oIdx}" class="text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm text-slate-200">${opt}</span>
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-blue-600 transition">
+                            <input type="radio" name="q_${idx}" value="${oIdx}" class="text-blue-600 focus:ring-blue-500">
+                            <span class="text-sm text-slate-800">${opt}</span>
                         </label>
                     `).join('');
                 } else {
                     optionsHtml = `
-                        <textarea name="q_${idx}" placeholder="اكتب إجابتك هنا..." class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-indigo-500 h-28"></textarea>
+                        <textarea name="q_${idx}" placeholder="اكتب إجابتك هنا..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600 h-28"></textarea>
                     `;
                 }
 
                 container.innerHTML += `
-                    <div class="bg-cardBg p-6 rounded-2xl border border-slate-700 space-y-4">
+                    <div class="bg-cardBg p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-indigo-400">السؤال ${idx + 1} (${q.degree} درجات)</span>
-                            <span class="text-xs text-slate-500">${q.type === 'mcq' ? 'اختيار من متعدد' : 'سؤال مقالي'}</span>
+                            <span class="text-xs font-bold text-blue-600">السؤال ${idx + 1} (${q.degree} درجات)</span>
+                            <span class="text-xs text-slate-400">${q.type === 'mcq' ? 'اختيار من متعدد' : 'سؤال مقالي'}</span>
                         </div>
-                        <p class="text-sm font-bold text-white">${q.text}</p>
+                        <p class="text-sm font-bold text-slate-900">${q.text}</p>
                         <div class="space-y-2">${optionsHtml}</div>
                     </div>
                 `;
@@ -744,7 +752,7 @@
             listEl.innerHTML = '';
 
             if(!subsSnap.exists()) {
-                listEl.innerHTML = '<p class="text-xs text-slate-500">ليس لديك اختبارات مسجلة بعد.</p>';
+                listEl.innerHTML = '<p class="text-xs text-slate-400">ليس لديك اختبارات مسجلة بعد.</p>';
                 return;
             }
 
@@ -753,14 +761,14 @@
                 if(sub.studentId === currentUser.uid) {
                     const finalTotal = sub.mcqScore + (sub.essayScore || 0);
                     listEl.innerHTML += `
-                        <div class="p-4 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+                        <div class="p-4 bg-cardBg rounded-2xl border border-slate-200 shadow-sm space-y-2">
                             <div class="flex justify-between items-center">
-                                <h4 class="font-bold text-sm text-white">${sub.examTitle}</h4>
-                                <span class="px-2.5 py-1 text-xs font-bold rounded-lg ${sub.status === 'تم التصحيح' ? 'bg-emerald-600/20 text-emerald-400' : 'bg-amber-600/20 text-amber-400'}">${sub.status}</span>
+                                <h4 class="font-bold text-sm text-slate-900">${sub.examTitle}</h4>
+                                <span class="px-3 py-1 text-xs font-bold rounded-xl ${sub.status === 'تم التصحيح' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200'}">${sub.status}</span>
                             </div>
-                            <p class="text-xs text-slate-400">درجة الاختيار من متعدد: ${sub.mcqScore} | درجة المقالي: ${sub.essayScore || 0}</p>
-                            <p class="text-xs font-bold text-indigo-400">الدرجة النهائية الكلية: ${finalTotal}</p>
-                            ${sub.feedback ? `<p class="text-xs text-purple-300 mt-2 bg-purple-950/40 p-2 rounded-lg">ملاحظات الأدمن: ${sub.feedback}</p>` : ''}
+                            <p class="text-xs text-slate-500">درجة الاختيار من متعدد: ${sub.mcqScore} | درجة المقالي: ${sub.essayScore || 0}</p>
+                            <p class="text-xs font-bold text-blue-600">الدرجة النهائية الكلية: ${finalTotal}</p>
+                            ${sub.feedback ? `<p class="text-xs text-purple-700 mt-2 bg-purple-50 p-2.5 rounded-xl border border-purple-200">ملاحظات الأدمن: ${sub.feedback}</p>` : ''}
                         </div>
                     `;
                 }
@@ -774,8 +782,8 @@
             if(!listEl) return;
             listEl.innerHTML = '';
 
-            if(!subsSnap.exists() || !examsSnap.exists()) {
-                listEl.innerHTML = '<p class="text-xs text-slate-500">لا توجد تسليمات طلابية حالياً.</p>';
+                        if(!subsSnap.exists() || !examsSnap.exists()) {
+                listEl.innerHTML = '<p class="text-xs text-slate-400">لا توجد تسليمات طلابية حالياً.</p>';
                 return;
             }
 
@@ -792,29 +800,29 @@
                     let studentAns = sub.studentAnswers[qIdx];
                     if(qObj.type === 'essay') {
                         answersReviewHtml += `
-                            <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 space-y-2">
-                                <p class="text-xs text-slate-300"><b>سؤال مقالي (${qObj.degree} درجات):</b> ${qObj.text}</p>
-                                <p class="text-xs text-indigo-300 bg-slate-900 p-2 rounded"><b>إجابة الطالب:</b> ${studentAns || 'لم يجب'}</p>
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                                <p class="text-xs text-slate-700"><b>سؤال مقالي (${qObj.degree} درجات):</b> ${qObj.text}</p>
+                                <p class="text-xs text-blue-700 bg-white p-2.5 rounded-xl border border-slate-200"><b>إجابة الطالب:</b> ${studentAns || 'لم يجب'}</p>
                             </div>
                         `;
                     }
                 }
 
                 listEl.innerHTML += `
-                    <div class="p-5 bg-slate-900 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="p-5 bg-cardBg rounded-3xl border border-slate-200 shadow-sm space-y-4">
                         <div class="flex justify-between items-center">
                             <div>
-                                <h4 class="font-bold text-sm text-white">الطالب: ${sub.studentEmail}</h4>
-                                <p class="text-xs text-slate-400">الاختبار: ${sub.examTitle} | MCQ: ${sub.mcqScore}</p>
+                                <h4 class="font-bold text-sm text-slate-900">الطالب: ${sub.studentEmail}</h4>
+                                <p class="text-xs text-slate-500">الاختبار: ${sub.examTitle} | MCQ: ${sub.mcqScore}</p>
                             </div>
-                            <span class="text-xs px-3 py-1 bg-indigo-600/20 text-indigo-300 rounded-lg">${sub.status}</span>
+                            <span class="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-xl border border-blue-200 font-bold">${sub.status}</span>
                         </div>
                         <div class="space-y-3">${answersReviewHtml}</div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-800">
-                            <input type="number" id="grade_${subId}" placeholder="درجة الأسئلة المقالية" value="${sub.essayScore || 0}" class="px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white">
-                            <input type="text" id="feedback_${subId}" placeholder="ملاحظات الأدمن" value="${sub.feedback || ''}" class="px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                            <input type="number" id="grade_${subId}" placeholder="درجة الأسئلة المقالية" value="${sub.essayScore || 0}" class="px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
+                            <input type="text" id="feedback_${subId}" placeholder="ملاحظات الأدمن" value="${sub.feedback || ''}" class="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
                         </div>
-                        <button onclick="saveAdminGrading('${subId}')" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl transition shadow-md">حفظ التصحيح والدرجات</button>
+                        <button type="button" onclick="saveAdminGrading('${subId}')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition">حفظ التصحيح والدرجات</button>
                     </div>
                 `;
             });
