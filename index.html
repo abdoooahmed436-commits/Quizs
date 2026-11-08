@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Master</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial}
+body{background:#f2f6fd;color:#1b2d49}
+header{background:#fff;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 12px #0001;position:sticky;top:0;z-index:5}
+.logo{font-size:23px;font-weight:bold;color:#1769d2}
+.container{width:93%;max-width:850px;margin:25px auto}
+.page{display:none}.page.active{display:block}
+.hero{background:linear-gradient(120deg,#1769d2,#489aff);color:white;padding:38px 20px;text-align:center;border-radius:20px;margin-bottom:22px}
+.hero h1{font-size:27px;margin-bottom:12px}.hero p{line-height:1.8}
+.card{background:#fff;padding:23px;border-radius:17px;margin-bottom:18px;box-shadow:0 5px 22px #174a8510}
+.card h2{margin-bottom:15px}
+input,textarea,select{width:100%;padding:13px;border:1px solid #dce5f1;border-radius:10px;margin:8px 0 14px;font-size:15px;background:white;color:#172b4d;outline:none}
+input:focus,textarea:focus,select:focus{border-color:#1769d2}
+textarea{min-height:90px;resize:vertical}
+label{font-size:14px;font-weight:bold}
+button{cursor:pointer}
+.btn{background:#1769d2;color:#fff;border:0;padding:14px;border-radius:10px;font-size:16px;font-weight:bold;width:100%;margin-top:8px}
+.btn:hover{background:#1057b6}
+.secondary{background:#eaf2ff;color:#1769d2;border:0;padding:10px 14px;border-radius:9px;margin:4px}
+.danger{background:#fff0f0;color:#d33}
+.small{color:#8290a2;font-size:13px;line-height:1.8}
+.question{background:#fff;border:1px solid #e4ebf5;padding:18px;border-radius:13px;margin-bottom:15px}
+.question h3{line-height:1.8;margin:10px 0}
+.option{display:flex;align-items:center;gap:10px;background:#f3f7fd;padding:12px;border-radius:9px;margin:8px 0}
+.option input{width:auto;margin:0}
+.tag{display:inline-block;background:#eaf2ff;color:#1769d2;padding:6px 10px;border-radius:20px;font-size:12px}
+.item{border:1px solid #e2eaf5;border-radius:12px;padding:15px;margin:12px 0}
+.item h3{margin-bottom:8px}.hidden{display:none!important}
+footer{text-align:center;padding:30px;color:#8995a7}
+.result{text-align:center;padding:25px}
+.result strong{display:block;font-size:35px;color:#1769d2;margin:15px}
+@media(max-width:500px){.hero h1{font-size:23px}.card{padding:18px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">💙 Quiz Master</div>
+  <button class="secondary" onclick="showPage('home')">الرئيسية</button>
+</header>
+
+<div class="container">
+<section id="home" class="page active">
+  <div class="hero"><h1>مرحباً بك في Quiz Master</h1><p>منصتك للاختبارات والمسابقات التعليمية</p></div>
+  <div class="card">
+    <h2>🎓 دخول الطالب</h2><p class="small">اكتب اسمك وكود الاختبار.</p>
+    <input id="studentName" placeholder="اسم الطالب" maxlength="60">
+    <input id="studentCode" placeholder="كود الاختبار">
+    <button class="btn" onclick="enterExam()">دخول الاختبار</button>
+  </div>
+  <div class="card">
+    <h2>⚙️ لوحة التحكم</h2><p class="small">إدارة الاختبارات ومتابعة النتائج.</p>
+    <button class="btn" onclick="showPage('adminLogin')">دخول الأدمن</button>
+  </div>
+</section>
+
+<section id="adminLogin" class="page">
+  <div class="hero"><h1>لوحة الأدمن 🔐</h1><p>أهلاً بك في لوحة إدارة الاختبارات</p></div>
+  <div class="card">
+    <h2>كلمة مرور الأدمن</h2>
+    <input id="adminPassword" type="password" placeholder="أدخل كلمة المرور">
+    <button class="btn" onclick="adminLogin()">تسجيل الدخول</button>
+    <button class="secondary" onclick="showPage('home')">رجوع</button>
+  </div>
+</section>
+
+<section id="admin" class="page">
+  <div class="hero"><h1>لوحة التحكم ⚙️</h1><p>إدارة الاختبارات والنتائج</p></div>
+  <div class="card">
+    <h2>إنشاء اختبار جديد</h2>
+    <label>اسم الاختبار</label><input id="examName" placeholder="مثلاً: اختبار العلوم">
+    <label>كود الاختبار</label><input id="examCode" placeholder="مثلاً: SCI2026">
+    <label>مدة الاختبار بالدقائق</label><input id="examDuration" type="number" min="1" value="30">
+  </div>
+  <div class="card">
+    <h2>إضافة أسئلة الاختبار</h2>
+    <label>نص السؤال</label><textarea id="qText" placeholder="اكتب السؤال"></textarea>
+    <label>نوع السؤال</label>
+    <select id="qType" onchange="changeType()"><option value="mcq">اختياري</option><option value="essay">مقالي</option></select>
+    <div id="mcqFields">
+      <label>الاختيار الأول</label><input id="opt0" placeholder="الاختيار الأول">
+      <label>الاختيار الثاني</label><input id="opt1" placeholder="الاختيار الثاني">
+      <label>الاختيار الثالث</label><input id="opt2" placeholder="الاختيار الثالث">
+      <label>الاختيار الرابع</label><input id="opt3" placeholder="الاختيار الرابع">
+      <label>الإجابة الصحيحة</label>
+      <select id="correct"><option value="0">الأول</option><option value="1">الثاني</option><option value="2">الثالث</option><option value="3">الرابع</option></select>
+    </div>
+    <div id="essayFields" class="hidden">
+      <label>الإجابة النموذجية</label><textarea id="modelAnswer" placeholder="الإجابة النموذجية"></textarea>
+    </div>
+    <label>درجة السؤال</label><input id="qMark" type="number" min="1" value="1">
+    <button class="btn" onclick="addQuestion()">إضافة السؤال للقائمة</button>
+    <div id="draftQuestions"></div>
+  </div>
+  <button class="btn" onclick="saveExam()">حفظ الاختبار  </button>
+  <div class="card" style="margin-top:20px"><h2>الاختبارات المنشأة</h2><div id="examList">جارٍ التحميل...</div></div>
+  <div class="card"><h2>📊 نتائج الطلاب</h2><button class="secondary" onclick="loadResults()">تحديث النتائج وتصحيح الاختياري</button><div id="resultsList"></div></div>
+  <div class="card"><h2>📩 تظلمات الطلاب</h2><button class="secondary" onclick="loadAppeals()">تحديث التظلمات</button><div id="appealsList"><p class="small">اضغط تحديث التظلمات لعرض الطلبات.</p></div></div>
+  <button class="secondary danger" onclick="logoutAdmin()">تسجيل الخروج</button>
+</section>
+
+<section id="exam" class="page">
+  <div class="hero"><h1 id="examTitle">الاختبار</h1><p id="examInfo"></p></div>
+  <div id="questionsArea"></div>
+  <button class="btn" onclick="submitExam()">تسليم الاختبار</button>
+</section>
+
+<section id="done" class="page">
+  <div class="card result">
+    <h2>تم استلام إجابتك بنجاح 💙</h2>
+    <p class="small">يمكنك تقديم تظلم على أي إجابة مقالية من الأسفل.</p>
+    <div id="studentResult"></div>
+    <button class="btn" onclick="backHome()">العودة للرئيسية</button>
+  </div>
+</section>
+</div>
+<footer>Quiz Master © 2026<br>منصة الاختبارات التعليمية</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDEvZe86JjxzvwVaBrUZEGdMMChu_Dba00",
+  authDomain: "quizs-15f9a.firebaseapp.com",
+  databaseURL: "https://quizs-15f9a-default-rtdb.firebaseio.com",
+  projectId: "quizs-15f9a",
+  storageBucket: "quizs-15f9a.firebasestorage.app",
+  messagingSenderId: "461733011663",
+  appId: "1:461733011663:web:56c7c5a057167c319957ba",
+  measurementId: "G-YTLR2SL24H"
+};
+
+const ADMIN_UID = "lKbNNIZOeWYRA9dsGdO41vx7Zh42";
+const ADMIN_EMAIL = "abdelrhmanahmed12031@gmail.com";
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+let currentSubmissionId = null;
+let currentExam = null;
+let draftQuestions = [];
+let studentName = "";
+let studentUid = "";
+let lastSubmission = null;
+
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function notify(message) { alert(message); }
+async function ensureStudentAuth() {
+  if (!auth.currentUser) await auth.signInAnonymously();
+  return auth.currentUser;
+}
+function isAdmin() {
+  return !!auth.currentUser && auth.currentUser.uid === ADMIN_UID;
+}
+async function adminLogin() {
+  const password = document.getElementById("adminPassword").value;
+  if (!password) return notify("اكتب كلمة المرور.");
+  try {
+    const result = await auth.signInWithEmailAndPassword(ADMIN_EMAIL, password);
+    if (result.user.uid !== ADMIN_UID) {
+      await auth.signOut();
+      return notify("هذا الحساب ليس حساب الأدمن المعتمد.");
+    }
+    document.getElementById("adminPassword").value = "";
+    showPage("admin");
+    await Promise.all([loadExams(), loadResults(), loadAppeals()]);
+  } catch (error) {
+    console.error(error);
+    notify("فشل تسجيل الدخول. راجع كلمة المرور.");
+  }
+}
+async function logoutAdmin() {
+  if (!isAdmin()) return;
+  await auth.signOut();
+  showPage("home");
+}
+async function backHome() {
+  lastSubmission = null;
+  currentSubmissionId = null;
+  document.getElementById("studentResult").innerHTML = "";
+  if (auth.currentUser && auth.currentUser.isAnonymous) {
+    // Keep anonymous session so the student can submit another test safely.
+  }
+  showPage("home");
+}
+
+function changeType() {
+  const type = document.getElementById("qType").value;
+  document.getElementById("mcqFields").classList.toggle("hidden", type !== "mcq");
+  document.getElementById("essayFields").classList.toggle("hidden", type !== "essay");
+}
+function addQuestion() {
+  const text = document.getElementById("qText").value.trim();
+  const type = document.getElementById("qType").value;
+  const mark = Number(document.getElementById("qMark").value);
+  if (!text || !Number.isFinite(mark) || mark < 1) return notify("أكمل نص السؤال والدرجة.");
+  const question = {id:"q_" + Date.now() + "_" + draftQuestions.length, text, type, mark};
+  if (type === "mcq") {
+    const options = [0,1,2,3].map(i => document.getElementById("opt"+i).value.trim());
+    if (options.some(x => !x)) return notify("أكمل الاختيارات الأربعة.");
+    question.options = options;
+    question.correct = Number(document.getElementById("correct").value);
+  } else {
+    const model = document.getElementById("modelAnswer").value.trim();
+    if (!model) return notify("أدخل الإجابة النموذجية.");
+    question.modelAnswer = model;
+  }
+  draftQuestions.push(question);
+  document.getElementById("qText").value = "";
+  document.getElementById("modelAnswer").value = "";
+  [0,1,2,3].forEach(i => document.getElementById("opt"+i).value = "");
+  renderDraft();
+}
+function renderDraft() {
+  document.getElementById("draftQuestions").innerHTML = draftQuestions.map((q,i) => `
+    <div class="item"><b>${i+1}. ${esc(q.text)}</b>
+    <p class="small">${q.type === "mcq" ? "اختياري" : "مقالي"} | الدرجة: ${q.mark}</p>
+    <button class="secondary danger" onclick="removeDraft(${i})">حذف</button></div>
+  `).join("");
+}
+function removeDraft(i) { draftQuestions.splice(i,1); renderDraft(); }
+
+async function saveExam() {
+  if (!isAdmin()) return notify("يجب تسجيل دخول الأدمن.");
+  const name = document.getElementById("examName").value.trim();
+  const code = document.getElementById("examCode").value.trim();
+  const duration = Number(document.getElementById("examDuration").value);
+  if (!name || !code || !Number.isFinite(duration) || duration < 1 || !draftQuestions.length)
+    return notify("أكمل بيانات الاختبار وأضف سؤالاً واحداً على الأقل.");
+  try {
+    const all = await db.ref("examsPublic").once("value");
+    let duplicate = false;
+    all.forEach(item => {
+      if (String(item.val().code).toLowerCase() === code.toLowerCase()) duplicate = true;
+    });
+    if (duplicate) return notify("كود الاختبار مستخدم بالفعل.");
+    const id = db.ref("examsPublic").push().key;
+    const publicQuestions = draftQuestions.map(q => {
+      const {correct, modelAnswer, ...safeQuestion} = q;
+      return safeQuestion;
+    });
+    const keys = {};
+    draftQuestions.forEach(q => {
+      keys[q.id] = {correct:q.correct ?? null, modelAnswer:q.modelAnswer ?? null, mark:q.mark, type:q.type};
+    });
+    const updates = {};
+    updates["examsPublic/" + id] = {name, code, duration, questions:publicQuestions, createdAt:Date.now()};
+    updates["answerKeys/" + id] = keys;
+    await db.ref().update(updates);
+    draftQuestions = [];
+    renderDraft();
+    document.getElementById("examName").value = "";
+    document.getElementById("examCode").value = "";
+    notify("تم حفظ الاختبار بنجاح 💙");
+    await loadExams();
+  } catch (error) {
+    console.error(error);
+    notify("حدث خطأ أثناء حفظ الاختبار.");
+  }
+}
+async function loadExams() {
+  if (!isAdmin()) return;
+  try {
+    const snap = await db.ref("examsPublic").once("value");
+    const exams = [];
+    snap.forEach(item => exams.push({id:item.key,...item.val()}));
+    document.getElementById("examList").innerHTML = exams.length ? exams.map(e => `
+      <div class="item"><h3>${esc(e.name)}</h3>
+      <p class="small">الكود: ${esc(e.code)}</p>
+      <p class="small">عدد الأسئلة: ${(e.questions || []).length}</p>
+      <p class="small">المدة: ${Number(e.duration)} دقيقة</p></div>
+    `).join("") : '<p class="small">لا توجد اختبارات بعد.</p>';
+  } catch (error) {
+    console.error(error);
+    notify("تعذر تحميل الاختبارات.");
+  }
+}
+async function enterExam() {
+  const name = document.getElementById("studentName").value.trim();
+  const code = document.getElementById("studentCode").value.trim();
+  if (!name || !code) return notify("اكتب اسمك وكود الاختبار.");
+  try {
+    await ensureStudentAuth();
+    studentUid = auth.currentUser.uid;
+    studentName = name;
+    const snap = await db.ref("examsPublic").once("value");
+    let found = null;
+    snap.forEach(item => {
+      const e = item.val();
+      if (String(e.code).toLowerCase() === code.toLowerCase()) found = {id:item.key,...e};
+    });
+    if (!found) return notify("كود الاختبار غير صحيح.");
+    if (!found.questions || !found.questions.length) return notify("الاختبار لا يحتوي على أسئلة.");
+    currentExam = found;
+    renderExam();
+    showPage("exam");
+  } catch (error) {
+    console.error(error);
+    notify("تعذر الدخول. تحقق من الاتصال وإعدادات Firebase.");
+  }
+}
+function renderExam() {
+  document.getElementById("examTitle").textContent = currentExam.name;
+  document.getElementById("examInfo").textContent = "المدة: " + currentExam.duration + " دقيقة";
+  document.getElementById("questionsArea").innerHTML = currentExam.questions.map((q,i) => {
+    if (q.type === "mcq") return `
+      <div class="question"><span class="tag">اختياري</span><h3>${i+1}. ${esc(q.text)}</h3>
+      ${q.options.map((o,j) => `<label class="option"><input type="radio" name="${q.id}" value="${j}">${esc(o)}</label>`).join("")}
+      <p class="small">الدرجة: ${Number(q.mark)}</p></div>`;
+    return `<div class="question"><span class="tag">مقالي</span><h3>${i+1}. ${esc(q.text)}</h3>
+      <textarea id="essay_${q.id}" placeholder="اكتب إجابتك هنا"></textarea>
+      <p class="small">الدرجة: ${Number(q.mark)}</p></div>`;
+  }).join("");
+}
+async function submitExam() {
+  if (!currentExam || !auth.currentUser) return;
+  if (!confirm("هل تريد تسليم الاختبار؟")) return;
+  try {
+    const answers = {};
+    currentExam.questions.forEach(q => {
+      if (q.type === "mcq") {
+        const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+        answers[q.id] = selected ? Number(selected.value) : null;
+      } else {
+        answers[q.id] = document.getElementById("essay_" + q.id).value.trim();
+      }
+    });
+    const submissionRef = db.ref("submissions").push();
+    currentSubmissionId = submissionRef.key;
+    await submissionRef.set({
+      studentUid:auth.currentUser.uid, studentName, examId:currentExam.id,
+      examName:currentExam.name, answers,
+      submittedAt:firebase.database.ServerValue.TIMESTAMP
+    });
+    lastSubmission = {id:currentSubmissionId, exam:currentExam, answers, studentUid:auth.currentUser.uid, studentName};
+    showStudentResult();
+    currentExam = null;
+    showPage("done");
+  } catch (error) {
+    console.error(error);
+    notify("تعذر تسليم الإجابات. حاول مرة أخرى.");
+  }
+}
+function showStudentResult() {
+  const box = document.getElementById("studentResult");
+  if (!lastSubmission) return;
+  let html = "";
+  lastSubmission.exam.questions.forEach((q,i) => {
+    if (q.type !== "essay") return;
+    html += `<div class="item" style="text-align:right">
+      <h3>${i+1}. ${esc(q.text)}</h3>
+      <p><b>إجابتك:</b></p><p>${esc(lastSubmission.answers[q.id] || "لم تكتب إجابة")}</p>
+      <p class="small">الدرجة القصوى: ${Number(q.mark)}</p>
+      <button class="secondary" id="appealBtn_${q.id}" onclick="sendAppeal('${q.id}')">📩 تقديم تظلم</button>
+      <p id="appealStatus_${q.id}" class="small"></p></div>`;
+  });
+  if (!html) html = '<p class="small">لا توجد أسئلة مقالية في هذا الاختبار.</p>';
+  box.innerHTML = html;
+}
+async function sendAppeal(qid) {
+  if (!lastSubmission || !auth.currentUser ||
+      auth.currentUser.uid !== lastSubmission.studentUid) {
+    return notify("تعذر التحقق من حساب الطالب.");
+  }
+
+  const q = lastSubmission.exam.questions.find(
+    x => x.id === qid && x.type === "essay"
+  );
+
+  if (!q) return;
+
+  if (!confirm("هل تريد إرسال التظلم لهذا السؤال؟")) return;
+
+  const status = document.getElementById("appealStatus_" + qid);
+  const btn = document.getElementById("appealBtn_" + qid);
+
+  try {
+    await db.ref(
+      "appeals/" + lastSubmission.id + "/" + qid
+    ).set({
+      studentUid: lastSubmission.studentUid,
+      studentName: lastSubmission.studentName,
+      examId: lastSubmission.exam.id,
+      examName: lastSubmission.exam.name,
+      questionId: qid,
+      questionText: q.text,
+      studentAnswer: lastSubmission.answers[qid] || "",
+      maxMark: Number(q.mark),
+      status: "pending",
+      submittedAt: firebase.database.ServerValue.TIMESTAMP
+    });
+
+    status.textContent = "تم إرسال التظلم بنجاح 💙";
+    btn.disabled = true;
+    btn.textContent = "تم إرسال التظلم";
+
+  } catch (error) {
+    console.error(error);
+    status.textContent = "تعذر الإرسال. راجع قواعد Firebase.";
+  }
+}
+async function loadResults() {
+  if (!isAdmin()) return;
+  const box = document.getElementById("resultsList");
+  box.innerHTML = '<p class="small">جارٍ تحميل النتائج...</p>';
+  try {
+    const [subSnap,keySnap] = await Promise.all([
+      db.ref("submissions").once("value"), db.ref("answerKeys").once("value")
+    ]);
+    const keys = keySnap.val() || {};
+    const submissions = [];
+    subSnap.forEach(item => submissions.push({id:item.key,...item.val()}));
+    if (!submissions.length) {
+      box.innerHTML = '<p class="small">لا توجد إجابات حتى الآن.</p>';
+      return;
+    }
+    let html = "";
+    for (const s of submissions) {
+      const examKeys = keys[s.examId] || {};
+      const oldSnap = await db.ref("results/" + s.id).once("value");
+      const old = oldSnap.val() || {};
+      const essayScores = old.essayScores || {};
+      let mcqScore=0,total=0,correctCount=0,wrongCount=0,essayPending=0,essayScore=0;
+      Object.keys(examKeys).forEach(qid => {
+        const k=examKeys[qid], mark=Number(k.mark||0);
+        total += mark;
+        if (k.type==="mcq") {
+          if (Number(s.answers?.[qid])===Number(k.correct)) {mcqScore+=mark;correctCount++;}
+          else wrongCount++;
+        } else if (Object.prototype.hasOwnProperty.call(essayScores,qid)) {
+          essayScore += Number(essayScores[qid] || 0);
+        } else essayPending++;
+      });
+                const result = {
+        studentName: s.studentName,
+        studentUid: s.studentUid,
+        examName: s.examName,
+        mcqScore,
+        essayScore,
+        essayScores,
+        score: mcqScore + essayScore,
+        total,
+        correctCount,
+        wrongCount,
+        essayPending,
+        submittedAt: s.submittedAt || Date.now()
+      };
+
+      await db.ref("results/" + s.id).update(result);
+
+      html += `
+        <div class="item">
+          <h3>${esc(s.studentName)}</h3>
+          <p class="small">الاختبار: ${esc(s.examName)}</p>
+          <p class="small">درجة الاختياري: ${mcqScore}</p>
+          <p class="small">درجة المقالي: ${essayScore}</p>
+          <p class="small">الدرجة الحالية: ${result.score} / ${total}</p>
+          <p class="small">أسئلة مقالية تنتظر المراجعة: ${essayPending}</p>
+          <p class="small">صحيح: ${correctCount} | خطأ: ${wrongCount}</p>
+        </div>
+      `;
+    }
+
+    box.innerHTML = html;
+
+  } catch (error) {
+    console.error(error);
+    box.innerHTML =
+      '<p class="small">تعذر تحميل النتائج. راجع قواعد قاعدة البيانات.</p>';
+  }
+}
+
+async function loadAppeals() {
+  if (!isAdmin()) return;
+
+  const box = document.getElementById("appealsList");
+  if (!box) return;
+
+  box.innerHTML = '<p class="small">جاري تحميل التظلمات...</p>';
+
+  try {
+    const [appealsSnap, keysSnap] = await Promise.all([
+      db.ref("appeals").once("value"),
+      db.ref("answerKeys").once("value")
+    ]);
+
+    const allKeys = keysSnap.val() || {};
+    let html = "";
+
+    appealsSnap.forEach(subSnap => {
+      subSnap.forEach(questionSnap => {
+        const appeal = questionSnap.val();
+        const submissionId = subSnap.key;
+        const questionId = questionSnap.key;
+
+        if (!appeal) return;
+
+        const key = allKeys[appeal.examId]?.[questionId] || {};
+        const maxMark = Number(appeal.maxMark ?? key.mark ?? 0);
+        const modelAnswer = key.modelAnswer || "لا توجد إجابة نموذجية محفوظة.";
+
+        html += `
+          <div class="item">
+            <h3>${esc(appeal.studentName || "طالب")}</h3>
+
+            <p class="small">الاختبار: ${esc(appeal.examName || "")}</p>
+            <p><b>السؤال:</b> ${esc(appeal.questionText || "")}</p>
+            <p><b>إجابة الطالب:</b> ${esc(appeal.studentAnswer || "")}</p>
+
+            <p><b>الإجابة النموذجية:</b></p>
+            <p>${esc(modelAnswer)}</p>
+
+            <p class="small">الدرجة القصوى: ${maxMark}</p>
+            <p class="small">الحالة: ${
+              appeal.status === "pending" ? "بانتظار المراجعة" :
+              appeal.status === "accepted" ? "مقبول" : "مرفوض"
+            }</p>
+        `;
+
+        if (appeal.status === "pending") {
+          html += `
+            <label>الدرجة التي يستحقها الطالب</label>
+
+            <input
+              type="number"
+              id="mark_${submissionId}_${questionId}"
+              min="0"
+              max="${maxMark}"
+              step="0.5"
+              value="0"
+            >
+
+            <button class="btn"
+              onclick="reviewAppeal('${submissionId}','${questionId}','accept')">
+              قبول التظلم وحفظ الدرجة
+            </button>
+
+            <button class="secondary danger"
+              onclick="reviewAppeal('${submissionId}','${questionId}','reject')">
+              رفض التظلم
+            </button>
+          `;
+        } else {
+          html += `
+            <p class="small">
+              الدرجة المعتمدة: ${Number(appeal.reviewedMark || 0)}
+            </p>
+          `;
+        }
+
+        html += `</div>`;
+      });
+    });
+
+    box.innerHTML = html ||
+      '<p class="small">لا توجد تظلمات حتى الآن.</p>';
+
+  } catch (error) {
+    console.error(error);
+    box.innerHTML =
+      '<p class="small">تعذر تحميل التظلمات. راجع قواعد Firebase.</p>';
+  }
+}
+async function reviewAppeal(submissionId, questionId, action) {
+  if (!isAdmin()) return notify("غير مسموح لك بمراجعة التظلمات.");
+
+  if (action !== "accept" && action !== "reject") return;
+
+  try {
+    const appealRef = db.ref(
+      "appeals/" + submissionId + "/" + questionId
+    );
+
+    const appealSnap = await appealRef.once("value");
+
+    if (!appealSnap.exists()) {
+      return notify("التظلم غير موجود.");
+    }
+
+    const appeal = appealSnap.val();
+
+    if (appeal.status !== "pending") {
+      return notify("تمت مراجعة هذا التظلم من قبل.");
+    }
+
+    const keySnap = await db.ref(
+      "answerKeys/" + appeal.examId + "/" + questionId
+    ).once("value");
+
+    const questionKey = keySnap.val();
+
+    if (!questionKey || questionKey.type !== "essay") {
+      return notify("تعذر العثور على بيانات السؤال.");
+    }
+
+    const maxMark = Number(appeal.maxMark ?? questionKey.mark ?? 0);
+
+    let mark = 0;
+
+    if (action === "accept") {
+      const input = document.getElementById(
+        "mark_" + submissionId + "_" + questionId
+      );
+
+      mark = Number(input?.value);
+
+      if (
+        !Number.isFinite(mark) ||
+        mark < 0 ||
+        mark > maxMark
+      ) {
+        return notify("الدرجة يجب أن تكون بين صفر و" + maxMark);
+      }
+    }
+
+    const resultRef = db.ref("results/" + submissionId);
+    const resultSnap = await resultRef.once("value");
+    const result = resultSnap.val() || {};
+
+    const essayScores = {
+      ...(result.essayScores || {})
+    };
+
+    essayScores[questionId] = mark;
+
+    const newEssayScore = Object.values(essayScores).reduce(
+      (sum, value) => sum + Number(value || 0),
+      0
+    );
+
+    const newTotalScore =
+      Number(result.mcqScore || 0) + newEssayScore;
+
+    const updates = {};
+
+    updates[
+      "appeals/" + submissionId + "/" + questionId + "/status"
+    ] = action === "accept" ? "accepted" : "rejected";
+
+    updates[
+      "appeals/" + submissionId + "/" + questionId + "/reviewedMark"
+    ] = mark;
+
+    updates[
+      "appeals/" + submissionId + "/" + questionId + "/reviewedAt"
+    ] = firebase.database.ServerValue.TIMESTAMP;
+
+    updates[
+      "results/" + submissionId + "/essayScores"
+    ] = essayScores;
+
+    updates[
+      "results/" + submissionId + "/essayScore"
+    ] = newEssayScore;
+
+    updates[
+      "results/" + submissionId + "/score"
+    ] = newTotalScore;
+
+    await db.ref().update(updates);
+
+    notify(
+      action === "accept"
+        ? "تم قبول التظلم وتحديث الدرجة بنجاح 💙"
+        : "تم رفض التظلم."
+    );
+
+    await Promise.all([
+      loadAppeals(),
+      loadResults()
+    ]);
+
+  } catch (error) {
+    console.error(error);
+    notify("حدث خطأ أثناء المراجعة. راجع قواعد Firebase.");
+  }
+}
+</script>
+</body>
+</html>
