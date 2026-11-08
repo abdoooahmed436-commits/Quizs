@@ -46,10 +46,10 @@
                 <p class="text-slate-500 mb-8 text-sm">منصة الاختبارات والمسابقات الذكية والآمنة</p>
                 
                 <div class="space-y-4">
-                    <button onclick="showSection('studentAuthScreen')" class="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+                    <button type="button" onclick="showSection('studentAuthScreen')" class="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
                         <span>تسجيل / دخول كطالب</span>
                     </button>
-                    <button onclick="showSection('adminLoginScreen')" class="w-full py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl transition shadow-lg flex items-center justify-center gap-2">
+                    <button type="button" onclick="showSection('adminLoginScreen')" class="w-full py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl transition shadow-lg flex items-center justify-center gap-2">
                         <span>دخول الأدمن</span>
                     </button>
                 </div>
@@ -61,11 +61,11 @@
             <div class="bg-cardBg p-8 rounded-3xl shadow-xl border border-slate-200 max-w-md w-full">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-black text-slate-900">حساب الطالب</h2>
-                    <button onclick="showSection('homeScreen')" class="text-slate-500 hover:text-blue-600 text-sm font-bold">الرئيسية ⟵</button>
+                    <button type="button" onclick="showSection('homeScreen')" class="text-slate-500 hover:text-blue-600 text-sm font-bold">الرئيسية ⟵</button>
                 </div>
                 <div class="flex bg-slate-100 p-1.5 rounded-2xl mb-6">
-                    <button id="tabLoginBtn" onclick="switchStudentTab('login')" class="flex-1 py-2 rounded-xl font-bold text-sm transition bg-blue-600 text-white shadow-sm">تسجيل الدخول</button>
-                    <button id="tabRegisterBtn" onclick="switchStudentTab('register')" class="flex-1 py-2 rounded-xl font-bold text-sm transition text-slate-600">حساب جديد</button>
+                    <button type="button" id="tabLoginBtn" onclick="switchStudentTab('login')" class="flex-1 py-2 rounded-xl font-bold text-sm transition bg-blue-600 text-white shadow-sm">تسجيل الدخول</button>
+                    <button type="button" id="tabRegisterBtn" onclick="switchStudentTab('register')" class="flex-1 py-2 rounded-xl font-bold text-sm transition text-slate-600">حساب جديد</button>
                 </div>
                 <form id="studentLoginForm" onsubmit="handleStudentLogin(event)" class="space-y-4">
                     <div>
@@ -101,7 +101,7 @@
             <div class="bg-cardBg p-8 rounded-3xl shadow-xl border border-slate-200 max-w-md w-full">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-black text-slate-900">لوحة تحكم الأدمن</h2>
-                    <button onclick="showSection('homeScreen')" class="text-slate-500 hover:text-blue-600 text-sm font-bold">الرئيسية ⟵</button>
+                    <button type="button" onclick="showSection('homeScreen')" class="text-slate-500 hover:text-blue-600 text-sm font-bold">الرئيسية ⟵</button>
                 </div>
                 <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                     <div>
@@ -116,7 +116,6 @@
                 </form>
             </div>
         </section>
-
         <!-- 4. لوحة تحكم الطالب -->
         <section id="studentDashboard" class="hidden-section space-y-6">
             <header class="flex justify-between items-center bg-cardBg p-5 rounded-2xl border border-slate-200 shadow-sm">
@@ -124,18 +123,18 @@
                     <h2 id="studentWelcomeName" class="text-lg font-bold text-slate-900">أهلاً بك</h2>
                     <p class="text-xs text-slate-500">لوحة تحكم الطالب</p>
                 </div>
-                <button onclick="logoutUser()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition border border-red-200">تسجيل الخروج</button>
+                <button type="button" onclick="logoutUser()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition border border-red-200">تسجيل الخروج</button>
             </header>
             <div class="flex gap-2 bg-cardBg p-1.5 rounded-2xl border border-slate-200 shadow-sm">
-                <button onclick="switchStudentPanel('availableExams')" id="btnAvailableExams" class="flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm">الاختبارات المتاحة</button>
-                <button onclick="switchStudentPanel('studentResults')" id="btnStudentResults" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 transition">نتائجي والإجابات</button>
+                <button type="button" onclick="switchStudentPanel('availableExams')" id="btnAvailableExams" class="flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm">الاختبارات المتاحة</button>
+                <button type="button" onclick="switchStudentPanel('studentResults')" id="btnStudentResults" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 transition">نتائجي ومراجعة الإجابات</button>
             </div>
             <div id="panelAvailableExams" class="space-y-4">
                 <h3 class="text-base font-bold text-slate-800">الاختبارات الجاهزة للحل</h3>
                 <div id="availableExamsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
             <div id="panelStudentResults" class="hidden-section space-y-4">
-                <h3 class="text-base font-bold text-slate-800">سجل الاختبارات والنتائج</h3>
+                <h3 class="text-base font-bold text-slate-800">سجل الاختبارات والنتائج التفصيلية</h3>
                 <div id="studentResultsList" class="space-y-3"></div>
             </div>
         </section>
@@ -149,10 +148,22 @@
                 </div>
                 <div class="bg-blue-50 border border-blue-200 px-4 py-2 rounded-xl text-blue-600 font-mono font-bold text-sm" id="examTimer">00:00</div>
             </div>
-            <form id="examForm" onsubmit="submitExamAnswers(event)" class="space-y-6">
+            <form id="examForm" onsubmit="submitExamAnswers(event); return false;" class="space-y-6">
                 <div id="examQuestionsContainer" class="space-y-6"></div>
                 <button type="submit" class="w-full py-4 bg-blue-600 hover:bg-blue-700 font-black text-white rounded-2xl shadow-xl shadow-blue-600/20 transition">تسجيل وإرسال الإجابات</button>
             </form>
+        </section>
+
+        <!-- شاشة مراجعة النتيجة التفصيلية للطالب -->
+        <section id="studentReviewScreen" class="hidden-section space-y-6">
+            <header class="flex justify-between items-center bg-cardBg p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">مراجعة إجابات الاختبار</h2>
+                    <p id="reviewExamTitle" class="text-xs text-slate-500">تفاصيل الدرجات وأخطاء الأسئلة</p>
+                </div>
+                <button type="button" onclick="showSection('studentDashboard'); switchStudentPanel('studentResults');" class="px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold rounded-xl transition">العودة للنتائج ⟵</button>
+            </header>
+            <div id="studentReviewContainer" class="space-y-4"></div>
         </section>
 
         <!-- 6. لوحة تحكم الأدمن -->
@@ -160,15 +171,15 @@
             <header class="flex justify-between items-center bg-cardBg p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
                     <h2 class="text-lg font-bold text-slate-900">لوحة تحكم الأدمن</h2>
-                    <p class="text-xs text-red-600 font-bold">إدارة النظام والاختبارات والتصحيح</p>
+                    <p class="text-xs text-red-600 font-bold">إدارة النظام والاختبارات والتصحيح (بدون زحمة)</p>
                 </div>
-                <button onclick="logoutUser()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition border border-red-200">خروج</button>
+                <button type="button" onclick="logoutUser()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition border border-red-200">خروج</button>
             </header>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                <button onclick="switchAdminTab('create')" id="adminTabCreateBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm">إنشاء اختبار</button>
-                <button onclick="switchAdminTab('active')" id="adminTabActiveBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">الاختبارات النشطة</button>
-                <button onclick="switchAdminTab('archived')" id="adminTabArchivedBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">الاختبارات المنتهية</button>
-                <button onclick="switchAdminTab('grading')" id="adminTabGradingBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">تصحيح الإجابات</button>
+                <button type="button" onclick="switchAdminTab('create')" id="adminTabCreateBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm">إنشاء اختبار</button>
+                <button type="button" onclick="switchAdminTab('active')" id="adminTabActiveBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">الاختبارات النشطة</button>
+                <button type="button" onclick="switchAdminTab('archived')" id="adminTabArchivedBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">الاختبارات المنتهية</button>
+                <button type="button" onclick="switchAdminTab('grading')" id="adminTabGradingBtn" class="py-3 px-2 text-xs font-bold rounded-xl bg-slate-100 text-slate-700 transition">تصحيح الإجابات (المعلقة)</button>
             </div>
             <div id="adminPanelCreate" class="bg-cardBg p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
                 <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">إنشاء اختبار جديد وإضافة الأسئلة</h3>
@@ -215,7 +226,7 @@
                 <div id="adminArchivedExamsList" class="space-y-3"></div>
             </div>
             <div id="adminPanelGrading" class="hidden-section bg-cardBg p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                <h3 class="text-base font-bold text-slate-900">إجابات وتسليمات الطلاب</h3>
+                <h3 class="text-base font-bold text-slate-900">إجابات وتسليمات الطلاب المعلقة (تحتاج تصحيح)</h3>
                 <div id="adminSubmissionsList" class="space-y-3"></div>
             </div>
         </section>
@@ -274,7 +285,7 @@
         }
 
         window.showSection = function(sectionId) {
-            const sections = ['homeScreen', 'studentAuthScreen', 'adminLoginScreen', 'studentDashboard', 'examTakingScreen', 'adminDashboard'];
+            const sections = ['homeScreen', 'studentAuthScreen', 'adminLoginScreen', 'studentDashboard', 'examTakingScreen', 'studentReviewScreen', 'adminDashboard'];
             sections.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) el.classList.add('hidden-section');
@@ -548,7 +559,7 @@
                                 <h4 class="font-bold text-sm text-slate-900">${exam.title}</h4>
                                 <p class="text-xs text-slate-500">${exam.description || ''} | المدة: ${exam.duration} دقيقة</p>
                             </div>
-                            <button onclick="endExam('${examId}')" class="px-3.5 py-2 bg-red-100 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition">إنهاء وإخفاء</button>
+                            <button type="button" onclick="endExam('${examId}')" class="px-3.5 py-2 bg-red-100 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition">إنهاء وإخفاء</button>
                         </div>
                     `;
                 }
@@ -621,7 +632,7 @@
                             </div>
                             ${alreadyDone ? 
                                 '<span class="text-xs text-emerald-600 font-bold">تم تسليم الاختبار مسبقاً ✓</span>' :
-                                `<button onclick="startTakingExam('${examId}')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition">بدء الاختبار</button>`
+                                `<button type="button" onclick="startTakingExam('${examId}')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition">بدء الاختبار</button>`
                             }
                         </div>
                     `;
@@ -689,60 +700,87 @@
         }
 
         window.submitExamAnswers = async function(e) {
-            e.preventDefault();
-            if(examTimerInterval) clearInterval(examTimerInterval);
+            if(e) e.preventDefault();
 
-            const examSnap = await get(ref(db, `qm2Exams/${currentActiveExamId}`));
-            const keysSnap = await get(ref(db, `qm2AnswerKeys/${currentActiveExamId}`));
-            
-            if(!examSnap.exists() || !keysSnap.exists()) return;
+            if(examTimerInterval) {
+                clearInterval(examTimerInterval);
+                examTimerInterval = null;
+            }
 
-            const exam = examSnap.val();
-            const answerKeys = keysSnap.val();
+            if (!currentActiveExamId || !currentUser) {
+                showToast("خطأ: بيانات الاختبار أو الطالب غير موجودة!", true);
+                return;
+            }
 
-            let studentAnswers = {};
-            let mcqScore = 0;
-            let totalMcqPossible = 0;
-            let hasEssay = false;
+            try {
+                showToast("جاري إرسال إجاباتك...");
 
-            exam.questions.forEach((q, idx) => {
-                if(q.type === 'mcq') {
-                    totalMcqPossible += q.degree;
-                    const selected = document.querySelector(`input[name="q_${idx}"]:checked`);
-                    const selectedVal = selected ? Number(selected.value) : null;
-                    studentAnswers[idx] = selectedVal;
-
-                    if(selectedVal !== null && selectedVal === answerKeys[idx].correctIndex) {
-                        mcqScore += q.degree;
-                    }
-                } else {
-                    hasEssay = true;
-                    const essayText = document.querySelector(`textarea[name="q_${idx}"]`).value;
-                    studentAnswers[idx] = essayText;
+                const examSnap = await get(ref(db, `qm2Exams/${currentActiveExamId}`));
+                const keysSnap = await get(ref(db, `qm2AnswerKeys/${currentActiveExamId}`));
+                
+                if(!examSnap.exists() || !keysSnap.exists()) {
+                    showToast("خطأ: لم يتم العثور على بيانات الاختبار أو مفاتيح الإجابة!", true);
+                    return;
                 }
-            });
 
-            const submissionId = push(ref(db, 'qm2Submissions')).key;
-            const submissionData = {
-                examId: currentActiveExamId,
-                examTitle: exam.title,
-                studentId: currentUser.uid,
-                studentEmail: currentUser.email,
-                studentAnswers,
-                mcqScore,
-                totalMcqPossible,
-                essayGraded: !hasEssay,
-                essayScore: 0,
-                feedback: "",
-                status: hasEssay ? "في انتظار التصحيح" : "تم التصحيح",
-                submittedAt: new Date().toISOString()
-            };
+                const exam = examSnap.val();
+                const answerKeys = keysSnap.val();
 
-            await set(ref(db, `qm2Submissions/${submissionId}`), submissionData);
-            showToast("تم تسليم إجاباتك بنجاح!");
-            showSection('studentDashboard');
-            loadStudentAvailableExams();
-            loadStudentResults();
+                let studentAnswers = {};
+                let mcqScore = 0;
+                let totalMcqPossible = 0;
+                let hasEssay = false;
+
+                if (exam.questions && Array.isArray(exam.questions)) {
+                    exam.questions.forEach((q, idx) => {
+                        if(q.type === 'mcq') {
+                            totalMcqPossible += Number(q.degree || 0);
+                            const selected = document.querySelector(`input[name="q_${idx}"]:checked`);
+                            const selectedVal = selected ? Number(selected.value) : null;
+                            studentAnswers[idx] = selectedVal;
+
+                            if(selectedVal !== null && answerKeys[idx] && selectedVal === answerKeys[idx].correctIndex) {
+                                mcqScore += Number(q.degree || 0);
+                            }
+                        } else {
+                            hasEssay = true;
+                            const textarea = document.querySelector(`textarea[name="q_${idx}"]`);
+                            studentAnswers[idx] = textarea ? textarea.value : "";
+                        }
+                    });
+                }
+
+                // جلب اسم الطالب للأمان ولعرضه بدلاً من الإيميل
+                const userSnap = await get(ref(db, `qm2Users/${currentUser.uid}`));
+                const studentName = userSnap.exists() ? userSnap.val().name : "طالب";
+
+                const submissionId = push(ref(db, 'qm2Submissions')).key;
+                const submissionData = {
+                    examId: currentActiveExamId,
+                    examTitle: exam.title || "اختبار",
+                    studentId: currentUser.uid,
+                    studentName: studentName,
+                    studentAnswers: studentAnswers,
+                    mcqScore: Number(mcqScore),
+                    totalMcqPossible: Number(totalMcqPossible),
+                    essayGraded: !hasEssay,
+                    essayScore: 0,
+                    feedback: "",
+                    status: hasEssay ? "في انتظار التصحيح" : "تم التصحيح",
+                    submittedAt: new Date().toISOString()
+                };
+
+                await set(ref(db, `qm2Submissions/${submissionId}`), submissionData);
+
+                showToast("تم تسليم إجاباتك بنجاح!");
+                showSection('studentDashboard');
+                if(window.loadStudentAvailableExams) window.loadStudentAvailableExams();
+                if(window.loadStudentResults) window.loadStudentResults();
+
+            } catch (error) {
+                console.error("FIREBASE SUBMISSION ERROR:", error);
+                showToast("خطأ من قاعدة البيانات: " + error.message, true);
+            }
         }
 
         window.loadStudentResults = async function() {
@@ -758,8 +796,9 @@
 
             subsSnap.forEach(childSnap => {
                 const sub = childSnap.val();
+                const subId = childSnap.key;
                 if(sub.studentId === currentUser.uid) {
-                    const finalTotal = sub.mcqScore + (sub.essayScore || 0);
+                                    const finalTotal = sub.mcqScore + (sub.essayScore || 0);
                     listEl.innerHTML += `
                         <div class="p-4 bg-cardBg rounded-2xl border border-slate-200 shadow-sm space-y-2">
                             <div class="flex justify-between items-center">
@@ -769,10 +808,73 @@
                             <p class="text-xs text-slate-500">درجة الاختيار من متعدد: ${sub.mcqScore} | درجة المقالي: ${sub.essayScore || 0}</p>
                             <p class="text-xs font-bold text-blue-600">الدرجة النهائية الكلية: ${finalTotal}</p>
                             ${sub.feedback ? `<p class="text-xs text-purple-700 mt-2 bg-purple-50 p-2.5 rounded-xl border border-purple-200">ملاحظات الأدمن: ${sub.feedback}</p>` : ''}
+                            <button type="button" onclick="openStudentReview('${sub.examId}', '${subId}')" class="mt-2 w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition">مراجعة الأسئلة والأخطاء 🔍</button>
                         </div>
                     `;
                 }
             });
+        }
+
+        window.openStudentReview = async function(examId, subId) {
+            const examSnap = await get(ref(db, `qm2Exams/${examId}`));
+            const keysSnap = await get(ref(db, `qm2AnswerKeys/${examId}`));
+            const subSnap = await get(ref(db, `qm2Submissions/${subId}`));
+
+            if(!examSnap.exists() || !subSnap.exists()) return;
+
+            const exam = examSnap.val();
+            const answerKeys = keysSnap.exists() ? keysSnap.val() : {};
+            const sub = subSnap.val();
+
+            document.getElementById('reviewExamTitle').textContent = `مراجعة اختبار: ${exam.title}`;
+            const container = document.getElementById('studentReviewContainer');
+            container.innerHTML = '';
+
+            exam.questions.forEach((q, idx) => {
+                let studentAns = sub.studentAnswers[idx];
+                let questionResultHtml = '';
+
+                if(q.type === 'mcq') {
+                    let correctIdx = answerKeys[idx] ? answerKeys[idx].correctIndex : null;
+                    let isCorrect = (studentAns === correctIdx);
+                    let explanation = answerKeys[idx] ? answerKeys[idx].explanation : "";
+
+                    let optionsList = q.options.map((opt, oIdx) => {
+                        let style = "bg-slate-50 border-slate-200 text-slate-800";
+                        if(oIdx === correctIdx) style = "bg-emerald-50 border-emerald-300 text-emerald-800 font-bold";
+                        else if(oIdx === studentAns && !isCorrect) style = "bg-red-50 border-red-300 text-red-800 font-bold";
+                        return `<div class="p-3 border rounded-xl text-xs ${style}">${opt} ${oIdx === correctIdx ? ' (الإجابة الصحيحة ✓)' : ''} ${oIdx === studentAns && !isCorrect ? ' (إجابتك ✗)' : ''}</div>`;
+                    }).join('');
+
+                    questionResultHtml = `
+                        <div class="space-y-2 mt-2">
+                            <div class="text-xs font-bold ${isCorrect ? 'text-emerald-600' : 'text-red-600'}">${isCorrect ? 'إجابة صحيحة ✓' : 'إجابة خاطئة ✗'}</div>
+                            <div class="space-y-1.5">${optionsList}</div>
+                            ${explanation ? `<p class="text-xs text-blue-700 bg-blue-50 p-2.5 rounded-xl border border-blue-200 mt-2"><b>التفسير والشرح:</b> ${explanation}</p>` : ''}
+                        </div>
+                    `;
+                } else {
+                    questionResultHtml = `
+                        <div class="space-y-2 mt-2">
+                            <p class="text-xs text-blue-700 bg-white p-2.5 rounded-xl border border-slate-200"><b>إجابتك المقالية:</b> ${studentAns || 'لم يجب'}</p>
+                            <p class="text-xs text-purple-700 bg-purple-50 p-2 rounded-xl border border-purple-200">درجة المقالي الممنوحة: ${sub.essayScore || 0} من ${q.degree}</p>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML += `
+                    <div class="bg-cardBg p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-blue-600">السؤال ${idx + 1} (${q.degree} درجات)</span>
+                            <span class="text-xs text-slate-400">سؤال ${q.type === 'mcq' ? 'اختيار من متعدد' : 'مقالي'}</span>
+                        </div>
+                        <p class="text-sm font-bold text-slate-900">${q.text}</p>
+                        ${questionResultHtml}
+                    </div>
+                `;
+            });
+
+            showSection('studentReviewScreen');
         }
 
         window.loadAdminSubmissions = async function() {
@@ -782,50 +884,59 @@
             if(!listEl) return;
             listEl.innerHTML = '';
 
-                        if(!subsSnap.exists() || !examsSnap.exists()) {
+            if(!subsSnap.exists() || !examsSnap.exists()) {
                 listEl.innerHTML = '<p class="text-xs text-slate-400">لا توجد تسليمات طلابية حالياً.</p>';
                 return;
             }
 
             const exams = examsSnap.val();
+            let pendingCount = 0;
 
             subsSnap.forEach(subSnap => {
                 const sub = subSnap.val();
                 const subId = subSnap.key;
-                const exam = exams[sub.examId] || { questions: [] };
+                
+                if(sub.status === 'في انتظار التصحيح') {
+                    pendingCount++;
+                    const exam = exams[sub.examId] || { questions: [] };
 
-                let answersReviewHtml = '';
-                for(let qIdx in sub.studentAnswers) {
-                    let qObj = exam.questions[qIdx] || {};
-                    let studentAns = sub.studentAnswers[qIdx];
-                    if(qObj.type === 'essay') {
-                        answersReviewHtml += `
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                                <p class="text-xs text-slate-700"><b>سؤال مقالي (${qObj.degree} درجات):</b> ${qObj.text}</p>
-                                <p class="text-xs text-blue-700 bg-white p-2.5 rounded-xl border border-slate-200"><b>إجابة الطالب:</b> ${studentAns || 'لم يجب'}</p>
-                            </div>
-                        `;
+                    let answersReviewHtml = '';
+                    for(let qIdx in sub.studentAnswers) {
+                        let qObj = exam.questions[qIdx] || {};
+                        let studentAns = sub.studentAnswers[qIdx];
+                        if(qObj.type === 'essay') {
+                            answersReviewHtml += `
+                                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                                    <p class="text-xs text-slate-700"><b>سؤال مقالي (${qObj.degree} درجات):</b> ${qObj.text}</p>
+                                    <p class="text-xs text-blue-700 bg-white p-2.5 rounded-xl border border-slate-200"><b>إجابة الطالب:</b> ${studentAns || 'لم يجب'}</p>
+                                </div>
+                            `;
+                        }
                     }
-                }
 
-                listEl.innerHTML += `
-                    <div class="p-5 bg-cardBg rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h4 class="font-bold text-sm text-slate-900">الطالب: ${sub.studentEmail}</h4>
-                                <p class="text-xs text-slate-500">الاختبار: ${sub.examTitle} | MCQ: ${sub.mcqScore}</p>
+                    listEl.innerHTML += `
+                        <div class="p-5 bg-cardBg rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-sm text-slate-900">الطالب: ${sub.studentName || 'مجهول'}</h4>
+                                    <p class="text-xs text-slate-500">الاختبار: ${sub.examTitle} | MCQ: ${sub.mcqScore}</p>
+                                </div>
+                                <span class="text-xs px-3 py-1 bg-amber-50 text-amber-600 rounded-xl border border-amber-200 font-bold">${sub.status}</span>
                             </div>
-                            <span class="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-xl border border-blue-200 font-bold">${sub.status}</span>
+                            <div class="space-y-3">${answersReviewHtml}</div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                                <input type="number" id="grade_${subId}" placeholder="درجة الأسئلة المقالية" value="${sub.essayScore || 0}" class="px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
+                                <input type="text" id="feedback_${subId}" placeholder="ملاحظات الأدمن" value="${sub.feedback || ''}" class="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
+                            </div>
+                            <button type="button" onclick="saveAdminGrading('${subId}')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition">حفظ التصحيح وإرسال النتيجة للطالب</button>
                         </div>
-                        <div class="space-y-3">${answersReviewHtml}</div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
-                            <input type="number" id="grade_${subId}" placeholder="درجة الأسئلة المقالية" value="${sub.essayScore || 0}" class="px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                            <input type="text" id="feedback_${subId}" placeholder="ملاحظات الأدمن" value="${sub.feedback || ''}" class="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                        </div>
-                        <button type="button" onclick="saveAdminGrading('${subId}')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition">حفظ التصحيح والدرجات</button>
-                    </div>
-                `;
+                    `;
+                }
             });
+
+            if(pendingCount === 0) {
+                listEl.innerHTML = '<p class="text-xs text-slate-400">ممتاز! لا توجد اختبارات معلقة تنتظر التصحيح حالياً.</p>';
+            }
         }
 
         window.saveAdminGrading = async function(subId) {
