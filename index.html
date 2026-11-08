@@ -34,7 +34,12 @@ button{cursor:pointer}
 .item h3{margin-bottom:8px}.hidden{display:none!important}
 footer{text-align:center;padding:30px;color:#8995a7}
 .result{text-align:center;padding:25px}
-.result strong{display:block;font-size:35px;color:#1769d2;margin:15px}
+.result strong{display:block;font-size:30px;color:#1769d2;margin:15px}
+.good{background:#e9f9ef;color:#16743a;padding:10px;border-radius:9px;margin:8px 0}
+.bad{background:#fff0f0;color:#b42318;padding:10px;border-radius:9px;margin:8px 0}
+.pending{background:#fff8e6;color:#946200;padding:10px;border-radius:9px;margin:8px 0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.tabs button{flex:1;min-width:110px}
 @media(max-width:500px){.hero h1{font-size:23px}.card{padding:18px}}
 </style>
 </head>
@@ -48,13 +53,16 @@ footer{text-align:center;padding:30px;color:#8995a7}
 <section id="home" class="page active">
   <div class="hero"><h1>مرحباً بك في Quiz Master</h1><p>منصتك للاختبارات والمسابقات التعليمية</p></div>
   <div class="card">
-    <h2>🎓 دخول الطالب</h2><p class="small">اكتب اسمك وكود الاختبار.</p>
+    <h2>🎓 دخول الطالب</h2>
+    <p class="small">اكتب اسمك وكود الاختبار.</p>
     <input id="studentName" placeholder="اسم الطالب" maxlength="60">
     <input id="studentCode" placeholder="كود الاختبار">
     <button class="btn" onclick="enterExam()">دخول الاختبار</button>
+    <button class="secondary" onclick="openMyReviews()">📚 مراجعة امتحاناتي</button>
   </div>
   <div class="card">
-    <h2>⚙️ لوحة التحكم</h2><p class="small">إدارة الاختبارات ومتابعة النتائج.</p>
+    <h2>⚙️ لوحة التحكم</h2>
+    <p class="small">إدارة الاختبارات ومتابعة النتائج.</p>
     <button class="btn" onclick="showPage('adminLogin')">دخول الأدمن</button>
   </div>
 </section>
@@ -71,36 +79,63 @@ footer{text-align:center;padding:30px;color:#8995a7}
 
 <section id="admin" class="page">
   <div class="hero"><h1>لوحة التحكم ⚙️</h1><p>إدارة الاختبارات والنتائج</p></div>
+
   <div class="card">
     <h2>إنشاء اختبار جديد</h2>
     <label>اسم الاختبار</label><input id="examName" placeholder="مثلاً: اختبار العلوم">
     <label>كود الاختبار</label><input id="examCode" placeholder="مثلاً: SCI2026">
     <label>مدة الاختبار بالدقائق</label><input id="examDuration" type="number" min="1" value="30">
   </div>
+
   <div class="card">
     <h2>إضافة أسئلة الاختبار</h2>
     <label>نص السؤال</label><textarea id="qText" placeholder="اكتب السؤال"></textarea>
     <label>نوع السؤال</label>
-    <select id="qType" onchange="changeType()"><option value="mcq">اختياري</option><option value="essay">مقالي</option></select>
+    <select id="qType" onchange="changeType()">
+      <option value="mcq">اختياري</option>
+      <option value="essay">مقالي</option>
+    </select>
     <div id="mcqFields">
       <label>الاختيار الأول</label><input id="opt0" placeholder="الاختيار الأول">
       <label>الاختيار الثاني</label><input id="opt1" placeholder="الاختيار الثاني">
       <label>الاختيار الثالث</label><input id="opt2" placeholder="الاختيار الثالث">
       <label>الاختيار الرابع</label><input id="opt3" placeholder="الاختيار الرابع">
       <label>الإجابة الصحيحة</label>
-      <select id="correct"><option value="0">الأول</option><option value="1">الثاني</option><option value="2">الثالث</option><option value="3">الرابع</option></select>
+      <select id="correct">
+        <option value="0">الأول</option><option value="1">الثاني</option>
+        <option value="2">الثالث</option><option value="3">الرابع</option>
+      </select>
+      <label>شرح الإجابة الصحيحة (اختياري)</label>
+      <textarea id="mcqExplanation" placeholder="اكتب سبب صحة الإجابة"></textarea>
     </div>
     <div id="essayFields" class="hidden">
-      <label>الإجابة النموذجية</label><textarea id="modelAnswer" placeholder="الإجابة النموذجية"></textarea>
+      <label>الإجابة النموذجية</label>
+      <textarea id="modelAnswer" placeholder="الإجابة النموذجية"></textarea>
     </div>
     <label>درجة السؤال</label><input id="qMark" type="number" min="1" value="1">
     <button class="btn" onclick="addQuestion()">إضافة السؤال للقائمة</button>
     <div id="draftQuestions"></div>
   </div>
-  <button class="btn" onclick="saveExam()">حفظ الاختبار  </button>
-  <div class="card" style="margin-top:20px"><h2>الاختبارات المنشأة</h2><div id="examList">جارٍ التحميل...</div></div>
-  <div class="card"><h2>📊 نتائج الطلاب</h2><button class="secondary" onclick="loadResults()">تحديث النتائج وتصحيح الاختياري</button><div id="resultsList"></div></div>
-  <div class="card"><h2>📩 تظلمات الطلاب</h2><button class="secondary" onclick="loadAppeals()">تحديث التظلمات</button><div id="appealsList"><p class="small">اضغط تحديث التظلمات لعرض الطلبات.</p></div></div>
+
+  <button class="btn" onclick="saveExam()">حفظ الاختبار</button>
+
+  <div class="card" style="margin-top:20px">
+    <h2>الاختبارات المنشأة</h2>
+    <div id="examList">جارٍ التحميل...</div>
+  </div>
+
+  <div class="card">
+    <h2>📊 نتائج الطلاب وتصحيح المقالي</h2>
+    <button class="secondary" onclick="loadResults()">تحديث النتائج</button>
+    <div id="resultsList"></div>
+  </div>
+
+  <div class="card">
+    <h2>📩 التظلمات المنتظرة</h2>
+    <button class="secondary" onclick="loadAppeals()">تحديث التظلمات</button>
+    <div id="appealsList"></div>
+  </div>
+
   <button class="secondary danger" onclick="logoutAdmin()">تسجيل الخروج</button>
 </section>
 
@@ -113,12 +148,22 @@ footer{text-align:center;padding:30px;color:#8995a7}
 <section id="done" class="page">
   <div class="card result">
     <h2>تم استلام إجابتك بنجاح 💙</h2>
-    <p class="small">يمكنك تقديم تظلم على أي إجابة مقالية من الأسفل.</p>
+    <p class="small">ستظهر مراجعة الإجابات والنتيجة بعد مراجعة الأدمن للاختبار.</p>
     <div id="studentResult"></div>
-    <button class="btn" onclick="backHome()">العودة للرئيسية</button>
+    <button class="btn" onclick="openMyReviews()">مراجعة امتحاناتي</button>
+    <button class="secondary" onclick="backHome()">العودة للرئيسية</button>
+  </div>
+</section>
+
+<section id="myReviews" class="page">
+  <div class="hero"><h1>📚 مراجعة امتحاناتي</h1><p>نتائجك وملاحظات التصحيح</p></div>
+  <div class="card">
+    <div id="myReviewsList"><p class="small">جارٍ تحميل مراجعاتك...</p></div>
+    <button class="secondary" onclick="showPage('home')">الرئيسية</button>
   </div>
 </section>
 </div>
+
 <footer>Quiz Master © 2026<br>منصة الاختبارات التعليمية</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -143,11 +188,10 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-let currentSubmissionId = null;
 let currentExam = null;
 let draftQuestions = [];
 let studentName = "";
-let studentUid = "";
+let currentSubmissionId = null;
 let lastSubmission = null;
 
 function showPage(id) {
@@ -160,12 +204,14 @@ function esc(value) {
   }[c]));
 }
 function notify(message) { alert(message); }
-async function ensureStudentAuth() {
-  if (!auth.currentUser) await auth.signInAnonymously();
-  return auth.currentUser;
-}
 function isAdmin() {
   return !!auth.currentUser && auth.currentUser.uid === ADMIN_UID;
+}
+async function ensureStudentAuth() {
+  if (!auth.currentUser || !auth.currentUser.isAnonymous) {
+    await auth.signInAnonymously();
+  }
+  return auth.currentUser;
 }
 async function adminLogin() {
   const password = document.getElementById("adminPassword").value;
@@ -189,279 +235,425 @@ async function logoutAdmin() {
   await auth.signOut();
   showPage("home");
 }
-async function backHome() {
+function backHome() {
   lastSubmission = null;
   currentSubmissionId = null;
+  currentExam = null;
   document.getElementById("studentResult").innerHTML = "";
-  if (auth.currentUser && auth.currentUser.isAnonymous) {
-    // Keep anonymous session so the student can submit another test safely.
-  }
   showPage("home");
 }
-
 function changeType() {
   const type = document.getElementById("qType").value;
   document.getElementById("mcqFields").classList.toggle("hidden", type !== "mcq");
   document.getElementById("essayFields").classList.toggle("hidden", type !== "essay");
 }
+
 function addQuestion() {
   const text = document.getElementById("qText").value.trim();
   const type = document.getElementById("qType").value;
   const mark = Number(document.getElementById("qMark").value);
-  if (!text || !Number.isFinite(mark) || mark < 1) return notify("أكمل نص السؤال والدرجة.");
-  const question = {id:"q_" + Date.now() + "_" + draftQuestions.length, text, type, mark};
+
+  if (!text || !Number.isFinite(mark) || mark < 1)
+    return notify("أكمل نص السؤال والدرجة.");
+
+  const q = {
+    id: "q_" + Date.now() + "_" + draftQuestions.length,
+    text, type, mark
+  };
+
   if (type === "mcq") {
-    const options = [0,1,2,3].map(i => document.getElementById("opt"+i).value.trim());
+    const options = [0,1,2,3].map(i =>
+      document.getElementById("opt" + i).value.trim()
+    );
     if (options.some(x => !x)) return notify("أكمل الاختيارات الأربعة.");
-    question.options = options;
-    question.correct = Number(document.getElementById("correct").value);
+
+    q.options = options;
+    q.correct = Number(document.getElementById("correct").value);
+    q.explanation = document.getElementById("mcqExplanation").value.trim();
   } else {
-    const model = document.getElementById("modelAnswer").value.trim();
-    if (!model) return notify("أدخل الإجابة النموذجية.");
-    question.modelAnswer = model;
+    q.modelAnswer = document.getElementById("modelAnswer").value.trim();
+    if (!q.modelAnswer) return notify("أدخل الإجابة النموذجية.");
   }
-  draftQuestions.push(question);
+
+  draftQuestions.push(q);
   document.getElementById("qText").value = "";
   document.getElementById("modelAnswer").value = "";
-  [0,1,2,3].forEach(i => document.getElementById("opt"+i).value = "");
+  document.getElementById("mcqExplanation").value = "";
+  [0,1,2,3].forEach(i => document.getElementById("opt" + i).value = "");
   renderDraft();
 }
+
 function renderDraft() {
-  document.getElementById("draftQuestions").innerHTML = draftQuestions.map((q,i) => `
-    <div class="item"><b>${i+1}. ${esc(q.text)}</b>
-    <p class="small">${q.type === "mcq" ? "اختياري" : "مقالي"} | الدرجة: ${q.mark}</p>
-    <button class="secondary danger" onclick="removeDraft(${i})">حذف</button></div>
-  `).join("");
+  document.getElementById("draftQuestions").innerHTML =
+    draftQuestions.map((q,i) => `
+      <div class="item">
+        <b>${i+1}. ${esc(q.text)}</b>
+        <p class="small">${q.type === "mcq" ? "اختياري" : "مقالي"} | الدرجة: ${q.mark}</p>
+        <button class="secondary danger" onclick="removeDraft(${i})">حذف</button>
+      </div>
+    `).join("");
 }
-function removeDraft(i) { draftQuestions.splice(i,1); renderDraft(); }
+function removeDraft(i) {
+  draftQuestions.splice(i,1);
+  renderDraft();
+}
 
 async function saveExam() {
   if (!isAdmin()) return notify("يجب تسجيل دخول الأدمن.");
+
   const name = document.getElementById("examName").value.trim();
   const code = document.getElementById("examCode").value.trim();
   const duration = Number(document.getElementById("examDuration").value);
-  if (!name || !code || !Number.isFinite(duration) || duration < 1 || !draftQuestions.length)
+
+  if (!name || !code || !Number.isFinite(duration) ||
+      duration < 1 || !draftQuestions.length) {
     return notify("أكمل بيانات الاختبار وأضف سؤالاً واحداً على الأقل.");
+  }
+
   try {
     const all = await db.ref("examsPublic").once("value");
     let duplicate = false;
+
     all.forEach(item => {
-      if (String(item.val().code).toLowerCase() === code.toLowerCase()) duplicate = true;
+      if (String(item.val().code).toLowerCase() === code.toLowerCase()) {
+        duplicate = true;
+      }
     });
+
     if (duplicate) return notify("كود الاختبار مستخدم بالفعل.");
+
     const id = db.ref("examsPublic").push().key;
-    const publicQuestions = draftQuestions.map(q => {
-      const {correct, modelAnswer, ...safeQuestion} = q;
-      return safeQuestion;
-    });
+    
+const publicQuestions = draftQuestions.map(q => {
+  const {correct, modelAnswer, explanation, ...safeQuestion} = q;
+  return safeQuestion;
+});
     const keys = {};
-    draftQuestions.forEach(q => {
-      keys[q.id] = {correct:q.correct ?? null, modelAnswer:q.modelAnswer ?? null, mark:q.mark, type:q.type};
-    });
+draftQuestions.forEach(q => {
+  keys[q.id] = {
+    correct: q.correct ?? null,
+    modelAnswer: q.modelAnswer ?? null,
+    explanation: q.explanation ?? null,
+    mark: q.mark,
+    type: q.type
+  };
+});
     const updates = {};
-    updates["examsPublic/" + id] = {name, code, duration, questions:publicQuestions, createdAt:Date.now()};
+    updates["examsPublic/" + id] = {
+      name, code, duration,
+      questions: publicQuestions,
+      archived: false,
+      createdAt: Date.now()
+    };
     updates["answerKeys/" + id] = keys;
+
     await db.ref().update(updates);
+
     draftQuestions = [];
     renderDraft();
     document.getElementById("examName").value = "";
     document.getElementById("examCode").value = "";
+
     notify("تم حفظ الاختبار بنجاح 💙");
     await loadExams();
+
   } catch (error) {
     console.error(error);
     notify("حدث خطأ أثناء حفظ الاختبار.");
   }
 }
+
 async function loadExams() {
   if (!isAdmin()) return;
+
   try {
     const snap = await db.ref("examsPublic").once("value");
     const exams = [];
-    snap.forEach(item => exams.push({id:item.key,...item.val()}));
-    document.getElementById("examList").innerHTML = exams.length ? exams.map(e => `
-      <div class="item"><h3>${esc(e.name)}</h3>
-      <p class="small">الكود: ${esc(e.code)}</p>
-      <p class="small">عدد الأسئلة: ${(e.questions || []).length}</p>
-      <p class="small">المدة: ${Number(e.duration)} دقيقة</p></div>
-    `).join("") : '<p class="small">لا توجد اختبارات بعد.</p>';
+
+    snap.forEach(item => exams.push({id:item.key, ...item.val()}));
+
+    document.getElementById("examList").innerHTML = exams.length
+      ? exams.map(e => `
+        <div class="item">
+          <h3>${esc(e.name)}</h3>
+          <p class="small">الكود: ${esc(e.code)}</p>
+          <p class="small">عدد الأسئلة: ${(e.questions || []).length}</p>
+          <p class="small">المدة: ${Number(e.duration)} دقيقة</p>
+          <p class="small">${e.archived ? "مؤرشف" : "نشط"}</p>
+          <button class="secondary" onclick="toggleArchive('${e.id}',${!!e.archived})">
+            ${e.archived ? "إلغاء الأرشفة" : "أرشفة الاختبار"}
+          </button>
+        </div>
+      `).join("")
+      : '<p class="small">لا توجد اختبارات بعد.</p>';
+
   } catch (error) {
     console.error(error);
     notify("تعذر تحميل الاختبارات.");
   }
 }
+
+async function toggleArchive(id, archived) {
+  if (!isAdmin()) return;
+
+  try {
+    await db.ref("examsPublic/" + id + "/archived").set(!archived);
+    notify(archived ? "تم إلغاء الأرشفة." : "تمت أرشفة الاختبار.");
+    await loadExams();
+  } catch (error) {
+    console.error(error);
+    notify("تعذر تحديث حالة الأرشفة.");
+  }
+}
+
 async function enterExam() {
   const name = document.getElementById("studentName").value.trim();
   const code = document.getElementById("studentCode").value.trim();
+
   if (!name || !code) return notify("اكتب اسمك وكود الاختبار.");
+
   try {
     await ensureStudentAuth();
-    studentUid = auth.currentUser.uid;
     studentName = name;
+
     const snap = await db.ref("examsPublic").once("value");
     let found = null;
+
     snap.forEach(item => {
       const e = item.val();
-      if (String(e.code).toLowerCase() === code.toLowerCase()) found = {id:item.key,...e};
+      if (String(e.code).toLowerCase() === code.toLowerCase()) {
+        found = {id:item.key, ...e};
+      }
     });
+
     if (!found) return notify("كود الاختبار غير صحيح.");
-    if (!found.questions || !found.questions.length) return notify("الاختبار لا يحتوي على أسئلة.");
+    if (found.archived) return notify("هذا الاختبار مؤرشف ولم يعد متاحاً.");
+    if (!found.questions || !found.questions.length)
+      return notify("الاختبار لا يحتوي على أسئلة.");
+
     currentExam = found;
     renderExam();
     showPage("exam");
+
   } catch (error) {
     console.error(error);
     notify("تعذر الدخول. تحقق من الاتصال وإعدادات Firebase.");
   }
 }
+
 function renderExam() {
   document.getElementById("examTitle").textContent = currentExam.name;
-  document.getElementById("examInfo").textContent = "المدة: " + currentExam.duration + " دقيقة";
-  document.getElementById("questionsArea").innerHTML = currentExam.questions.map((q,i) => {
-    if (q.type === "mcq") return `
-      <div class="question"><span class="tag">اختياري</span><h3>${i+1}. ${esc(q.text)}</h3>
-      ${q.options.map((o,j) => `<label class="option"><input type="radio" name="${q.id}" value="${j}">${esc(o)}</label>`).join("")}
-      <p class="small">الدرجة: ${Number(q.mark)}</p></div>`;
-    return `<div class="question"><span class="tag">مقالي</span><h3>${i+1}. ${esc(q.text)}</h3>
-      <textarea id="essay_${q.id}" placeholder="اكتب إجابتك هنا"></textarea>
-      <p class="small">الدرجة: ${Number(q.mark)}</p></div>`;
-  }).join("");
+  document.getElementById("examInfo").textContent =
+    "المدة: " + currentExam.duration + " دقيقة";
+
+  document.getElementById("questionsArea").innerHTML =
+    currentExam.questions.map((q,i) => {
+      if (q.type === "mcq") {
+        return `
+          <div class="question">
+            <span class="tag">اختياري</span>
+            <h3>${i+1}. ${esc(q.text)}</h3>
+            ${q.options.map((o,j) => `
+              <label class="option">
+                <input type="radio" name="${q.id}" value="${j}">
+                ${esc(o)}
+              </label>
+            `).join("")}
+            <p class="small">الدرجة: ${Number(q.mark)}</p>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="question">
+          <span class="tag">مقالي</span>
+          <h3>${i+1}. ${esc(q.text)}</h3>
+          <textarea id="essay_${q.id}" placeholder="اكتب إجابتك هنا"></textarea>
+          <p class="small">الدرجة: ${Number(q.mark)}</p>
+        </div>
+      `;
+    }).join("");
 }
+
 async function submitExam() {
   if (!currentExam || !auth.currentUser) return;
   if (!confirm("هل تريد تسليم الاختبار؟")) return;
+
   try {
     const answers = {};
+
     currentExam.questions.forEach(q => {
       if (q.type === "mcq") {
-        const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+        const selected = document.querySelector(
+          `input[name="${q.id}"]:checked`
+        );
         answers[q.id] = selected ? Number(selected.value) : null;
       } else {
-        answers[q.id] = document.getElementById("essay_" + q.id).value.trim();
+        answers[q.id] =
+          document.getElementById("essay_" + q.id).value.trim();
       }
     });
+
     const submissionRef = db.ref("submissions").push();
     currentSubmissionId = submissionRef.key;
+
     await submissionRef.set({
-      studentUid:auth.currentUser.uid, studentName, examId:currentExam.id,
-      examName:currentExam.name, answers,
-      submittedAt:firebase.database.ServerValue.TIMESTAMP
+      studentUid: auth.currentUser.uid,
+      studentName,
+      examId: currentExam.id,
+      examName: currentExam.name,
+      answers,
+      submittedAt: firebase.database.ServerValue.TIMESTAMP
     });
-    lastSubmission = {id:currentSubmissionId, exam:currentExam, answers, studentUid:auth.currentUser.uid, studentName};
-    showStudentResult();
+
+    lastSubmission = {
+      id: currentSubmissionId,
+      exam: currentExam,
+      answers,
+      studentUid: auth.currentUser.uid,
+      studentName
+    };
+
+    document.getElementById("studentResult").innerHTML = `
+      <div class="pending">
+        تم استلام إجاباتك. ستظهر مراجعة الاختياري ودرجات المقالي
+        بعد مراجعة الأدمن.
+      </div>
+    `;
+
     currentExam = null;
     showPage("done");
+
   } catch (error) {
     console.error(error);
     notify("تعذر تسليم الإجابات. حاول مرة أخرى.");
   }
 }
-function showStudentResult() {
-  const box = document.getElementById("studentResult");
-  if (!lastSubmission) return;
-  let html = "";
-  lastSubmission.exam.questions.forEach((q,i) => {
-    if (q.type !== "essay") return;
-    html += `<div class="item" style="text-align:right">
-      <h3>${i+1}. ${esc(q.text)}</h3>
-      <p><b>إجابتك:</b></p><p>${esc(lastSubmission.answers[q.id] || "لم تكتب إجابة")}</p>
-      <p class="small">الدرجة القصوى: ${Number(q.mark)}</p>
-      <button class="secondary" id="appealBtn_${q.id}" onclick="sendAppeal('${q.id}')">📩 تقديم تظلم</button>
-      <p id="appealStatus_${q.id}" class="small"></p></div>`;
-  });
-  if (!html) html = '<p class="small">لا توجد أسئلة مقالية في هذا الاختبار.</p>';
-  box.innerHTML = html;
-}
-async function sendAppeal(qid) {
-  if (!lastSubmission || !auth.currentUser ||
-      auth.currentUser.uid !== lastSubmission.studentUid) {
-    return notify("تعذر التحقق من حساب الطالب.");
-  }
 
-  const q = lastSubmission.exam.questions.find(
-    x => x.id === qid && x.type === "essay"
-  );
-
-  if (!q) return;
-
-  if (!confirm("هل تريد إرسال التظلم لهذا السؤال؟")) return;
-
-  const status = document.getElementById("appealStatus_" + qid);
-  const btn = document.getElementById("appealBtn_" + qid);
-
-  try {
-    await db.ref(
-      "appeals/" + lastSubmission.id + "/" + qid
-    ).set({
-      studentUid: lastSubmission.studentUid,
-      studentName: lastSubmission.studentName,
-      examId: lastSubmission.exam.id,
-      examName: lastSubmission.exam.name,
-      questionId: qid,
-      questionText: q.text,
-      studentAnswer: lastSubmission.answers[qid] || "",
-      maxMark: Number(q.mark),
-      status: "pending",
-      submittedAt: firebase.database.ServerValue.TIMESTAMP
-    });
-
-    status.textContent = "تم إرسال التظلم بنجاح 💙";
-    btn.disabled = true;
-    btn.textContent = "تم إرسال التظلم";
-
-  } catch (error) {
-    console.error(error);
-    status.textContent = "تعذر الإرسال. راجع قواعد Firebase.";
-  }
-}
+/* حساب الاختياري وتجهيز مراجعة الطالب */
 async function loadResults() {
   if (!isAdmin()) return;
+
   const box = document.getElementById("resultsList");
   box.innerHTML = '<p class="small">جارٍ تحميل النتائج...</p>';
+
   try {
-    const [subSnap,keySnap] = await Promise.all([
-      db.ref("submissions").once("value"), db.ref("answerKeys").once("value")
+    const [subSnap, keySnap, examSnap] = await Promise.all([
+      db.ref("submissions").once("value"),
+      db.ref("answerKeys").once("value"),
+      db.ref("examsPublic").once("value")
     ]);
+
     const keys = keySnap.val() || {};
+    const exams = examSnap.val() || {};
     const submissions = [];
-    subSnap.forEach(item => submissions.push({id:item.key,...item.val()}));
+
+    subSnap.forEach(item => submissions.push({id:item.key, ...item.val()}));
+
     if (!submissions.length) {
       box.innerHTML = '<p class="small">لا توجد إجابات حتى الآن.</p>';
       return;
     }
+
     let html = "";
+
     for (const s of submissions) {
       const examKeys = keys[s.examId] || {};
+      const exam = exams[s.examId] || {};
+      const questions = exam.questions || [];
       const oldSnap = await db.ref("results/" + s.id).once("value");
       const old = oldSnap.val() || {};
       const essayScores = old.essayScores || {};
-      let mcqScore=0,total=0,correctCount=0,wrongCount=0,essayPending=0,essayScore=0;
-      Object.keys(examKeys).forEach(qid => {
-        const k=examKeys[qid], mark=Number(k.mark||0);
+      const essayReasons = old.essayReasons || {};
+
+      let mcqScore = 0, total = 0;
+      let correctCount = 0, wrongCount = 0, essayPending = 0;
+      let essayScore = 0;
+      const reviewQuestions = [];
+
+      questions.forEach(q => {
+        const key = examKeys[q.id] || {};
+        const mark = Number(key.mark || q.mark || 0);
         total += mark;
-        if (k.type==="mcq") {
-          if (Number(s.answers?.[qid])===Number(k.correct)) {mcqScore+=mark;correctCount++;}
-          else wrongCount++;
-        } else if (Object.prototype.hasOwnProperty.call(essayScores,qid)) {
-          essayScore += Number(essayScores[qid] || 0);
-        } else essayPending++;
+
+        if (q.type === "mcq") {
+          const studentAnswer = s.answers?.[q.id];
+          const isCorrect = Number(studentAnswer) === Number(key.correct);
+
+          if (isCorrect) {
+            mcqScore += mark;
+            correctCount++;
+          } else {
+            wrongCount++;
+            reviewQuestions.push({
+              id: q.id,
+              type: "mcq",
+              text: q.text,
+              studentAnswer: studentAnswer === null || studentAnswer === undefined
+                ? "لم يتم اختيار إجابة"
+                : (q.options || [])[Number(studentAnswer)] || "إجابة غير معروفة",
+              correctAnswer: (q.options || [])[Number(key.correct)] || "",
+           explanation: key.explanation || "لم يضف الأدمن شرحاً لهذا السؤال.",
+            });
+          }
+        } else {
+          if (Object.prototype.hasOwnProperty.call(essayScores, q.id)) {
+            essayScore += Number(essayScores[q.id] || 0);
+            reviewQuestions.push({
+              id: q.id,
+              type: "essay",
+              text: q.text,
+              studentAnswer: s.answers?.[q.id] || "لم يكتب الطالب إجابة",
+              mark,
+              awarded: Number(essayScores[q.id] || 0),
+              reason: essayReasons[q.id] || "",
+              modelAnswer: key.modelAnswer || ""
+            });
+          } else {
+            essayPending++;
+          }
+        }
       });
-                const result = {
+
+      const allGraded = essayPending === 0;
+      const result = {
         studentName: s.studentName,
         studentUid: s.studentUid,
         examName: s.examName,
         mcqScore,
         essayScore,
         essayScores,
+        essayReasons,
         score: mcqScore + essayScore,
         total,
         correctCount,
         wrongCount,
         essayPending,
+        allGraded,
         submittedAt: s.submittedAt || Date.now()
       };
 
       await db.ref("results/" + s.id).update(result);
+
+      /* لا ننشر الإجابات الصحيحة إلا بعد تسليم الطالب */
+      await db.ref(
+        "studentReviews/" + s.studentUid + "/" + s.id
+      ).update({
+       
+        examId: s.examId,
+        examName: s.examName,
+        studentName: s.studentName,
+        score: result.score,
+        total: result.total,
+        mcqScore,
+        essayScore,
+        essayPending,
+        allGraded,
+        correctCount,
+        wrongCount,
+        questions: reviewQuestions,
+        updatedAt: Date.now()
+      });
 
       html += `
         <div class="item">
@@ -470,8 +662,32 @@ async function loadResults() {
           <p class="small">درجة الاختياري: ${mcqScore}</p>
           <p class="small">درجة المقالي: ${essayScore}</p>
           <p class="small">الدرجة الحالية: ${result.score} / ${total}</p>
-          <p class="small">أسئلة مقالية تنتظر المراجعة: ${essayPending}</p>
+          <p class="small">مقالات تنتظر التصحيح: ${essayPending}</p>
           <p class="small">صحيح: ${correctCount} | خطأ: ${wrongCount}</p>
+          ${questions.filter(q => q.type === "essay" &&
+            !Object.prototype.hasOwnProperty.call(essayScores,q.id))
+            .map(q => `
+              <div class="item">
+                <b>السؤال المقالي:</b>
+                <p>${esc(q.text)}</p>
+                <p><b>إجابة الطالب:</b></p>
+                <p>${esc(s.answers?.[q.id] || "لم يكتب إجابة")}</p>
+                <p class="small">الدرجة القصوى: ${Number(q.mark)}</p>
+                <label>الدرجة المستحقة</label>
+                <input type="number" id="grade_${s.id}_${q.id}"
+                  min="0" max="${Number(q.mark)}" step="0.5" value="0">
+                <label>سبب التصحيح وملاحظاتك للطالب</label>
+                <textarea id="reason_${s.id}_${q.id}"
+                  placeholder="اكتب سبب منح الدرجة أو خصمها"></textarea>
+                <button class="btn"
+                  onclick="gradeEssay('${s.id}','${q.id}','${s.studentUid}')">
+                  اعتماد التصحيح
+                </button>
+              </div>
+            `).join("")}
+          ${allGraded
+            ? '<p class="good">اكتمل تصحيح هذا الاختبار.</p>'
+            : '<p class="pending">النتيجة النهائية لم تكتمل بعد.</p>'}
         </div>
       `;
     }
@@ -481,94 +697,177 @@ async function loadResults() {
   } catch (error) {
     console.error(error);
     box.innerHTML =
-      '<p class="small">تعذر تحميل النتائج. راجع قواعد قاعدة البيانات.</p>';
+      '<p class="small">تعذر تحميل النتائج. راجع قواعد Firebase.</p>';
   }
 }
 
+async function gradeEssay(submissionId, questionId, studentUid) {
+  if (!isAdmin()) return notify("غير مسموح.");
+  try {
+    const subSnap = await db.ref("submissions/" + submissionId).once("value");
+    const submission = subSnap.val();
+    if (!submission) return notify("إجابة الطالب غير موجودة.");
+
+    const [examSnap, keySnap, resultSnap] = await Promise.all([
+      db.ref("examsPublic/" + submission.examId).once("value"),
+      db.ref("answerKeys/" + submission.examId + "/" + questionId).once("value"),
+      db.ref("results/" + submissionId).once("value")
+    ]);
+
+    const exam = examSnap.val();
+    const key = keySnap.val();
+    const result = resultSnap.val() || {};
+
+    const question = (exam?.questions || []).find(q => q.id === questionId);
+    if (!question || !key || key.type !== "essay")
+      return notify("تعذر العثور على السؤال المقالي.");
+
+    const mark = Number(document.getElementById(
+      "grade_" + submissionId + "_" + questionId
+    )?.value);
+
+    const reason = document.getElementById(
+      "reason_" + submissionId + "_" + questionId
+    )?.value.trim();
+
+    if (!Number.isFinite(mark) || mark < 0 || mark > Number(key.mark))
+      return notify("الدرجة يجب أن تكون بين صفر و" + key.mark);
+
+    if (!reason) return notify("اكتب سبب التصحيح أولاً.");
+
+    const essayScores = {...(result.essayScores || {})};
+    const essayReasons = {...(result.essayReasons || {})};
+    essayScores[questionId] = mark;
+    essayReasons[questionId] = reason;
+
+    await db.ref("results/" + submissionId).update({
+      essayScores,
+      essayReasons
+    });
+
+    notify("تم اعتماد درجة السؤال المقالي.");
+    await loadResults();
+
+  } catch (error) {
+    console.error(error);
+    notify("حدث خطأ أثناء التصحيح.");
+  }
+}
+/* إرسال تظلم على سؤال مقالي بعد ظهور التصحيح */
+async function sendAppeal(submissionId, questionId) {
+  if (!auth.currentUser || auth.currentUser.isAnonymous !== true) {
+    return notify("يجب الدخول بحساب الطالب الذي أدى الاختبار.");
+  }
+
+  try {
+    const uid = auth.currentUser.uid;
+    const reviewSnap = await db.ref(
+      "studentReviews/" + uid + "/" + submissionId
+    ).once("value");
+
+    const review = reviewSnap.val();
+    if (!review) return notify("لم يتم العثور على مراجعة هذا الاختبار.");
+
+    const q = (review.questions || []).find(x =>
+      x.id === questionId && x.type === "essay"
+    );
+
+    if (!q || q.awarded === undefined)
+      return notify("لا يمكن التظلم قبل تصحيح السؤال المقالي.");
+
+    const oldAppeal = await db.ref(
+      "appeals/" + submissionId + "/" + questionId
+    ).once("value");
+
+    if (oldAppeal.exists())
+      return notify("سبق إرسال تظلم لهذا السؤال.");
+
+    const reason = prompt("اكتب سبب التظلم:");
+    if (!reason || !reason.trim())
+      return notify("يجب كتابة سبب التظلم.");
+
+    await db.ref(
+      "appeals/" + submissionId + "/" + questionId
+    ).set({
+      examId: review.examId,
+      studentUid: uid,
+      studentName: review.studentName,
+      examName: review.examName,
+      questionId,
+      questionText: q.text,
+      studentAnswer: q.studentAnswer,
+      maxMark: Number(q.mark),
+      oldMark: Number(q.awarded),
+      studentReason: reason.trim(),
+      status: "pending",
+      submittedAt: firebase.database.ServerValue.TIMESTAMP
+    });
+
+    notify("تم إرسال التظلم بنجاح 💙");
+    await openMyReviews();
+
+  } catch (error) {
+    console.error(error);
+    notify("تعذر إرسال التظلم. راجع قواعد Firebase.");
+  }
+}
+
+/* قائمة التظلمات: تعرض المنتظر فقط */
 async function loadAppeals() {
   if (!isAdmin()) return;
 
   const box = document.getElementById("appealsList");
-  if (!box) return;
-
-  box.innerHTML = '<p class="small">جاري تحميل التظلمات...</p>';
+  box.innerHTML = '<p class="small">جارٍ تحميل التظلمات...</p>';
 
   try {
-    const [appealsSnap, keysSnap] = await Promise.all([
-      db.ref("appeals").once("value"),
-      db.ref("answerKeys").once("value")
-    ]);
-
-    const allKeys = keysSnap.val() || {};
+    const snap = await db.ref("appeals").once("value");
     let html = "";
 
-    appealsSnap.forEach(subSnap => {
+    snap.forEach(subSnap => {
       subSnap.forEach(questionSnap => {
-        const appeal = questionSnap.val();
-        const submissionId = subSnap.key;
-        const questionId = questionSnap.key;
+        const a = questionSnap.val();
+        if (!a || a.status !== "pending") return;
 
-        if (!appeal) return;
-
-        const key = allKeys[appeal.examId]?.[questionId] || {};
-        const maxMark = Number(appeal.maxMark ?? key.mark ?? 0);
-        const modelAnswer = key.modelAnswer || "لا توجد إجابة نموذجية محفوظة.";
+        const sid = subSnap.key;
+        const qid = questionSnap.key;
 
         html += `
           <div class="item">
-            <h3>${esc(appeal.studentName || "طالب")}</h3>
+            <h3>${esc(a.studentName || "طالب")}</h3>
+            <p class="small">الاختبار: ${esc(a.examName || "")}</p>
+            <p><b>السؤال:</b> ${esc(a.questionText || "")}</p>
+            <p><b>إجابة الطالب:</b></p>
+            <p>${esc(a.studentAnswer || "")}</p>
+            <p><b>سبب التظلم:</b></p>
+            <p>${esc(a.studentReason || "")}</p>
+            <p class="small">الدرجة الحالية: ${Number(a.oldMark || 0)} / ${Number(a.maxMark || 0)}</p>
 
-            <p class="small">الاختبار: ${esc(appeal.examName || "")}</p>
-            <p><b>السؤال:</b> ${esc(appeal.questionText || "")}</p>
-            <p><b>إجابة الطالب:</b> ${esc(appeal.studentAnswer || "")}</p>
+            <label>القرار</label>
+            <select id="appealAction_${sid}_${qid}">
+              <option value="accepted">قبول التظلم</option>
+              <option value="rejected">رفض التظلم</option>
+            </select>
 
-            <p><b>الإجابة النموذجية:</b></p>
-            <p>${esc(modelAnswer)}</p>
+            <label>الدرجة الجديدة إذا تم القبول</label>
+            <input type="number" id="appealMark_${sid}_${qid}"
+              min="0" max="${Number(a.maxMark || 0)}"
+              step="0.5" value="${Number(a.oldMark || 0)}">
 
-            <p class="small">الدرجة القصوى: ${maxMark}</p>
-            <p class="small">الحالة: ${
-              appeal.status === "pending" ? "بانتظار المراجعة" :
-              appeal.status === "accepted" ? "مقبول" : "مرفوض"
-            }</p>
-        `;
-
-        if (appeal.status === "pending") {
-          html += `
-            <label>الدرجة التي يستحقها الطالب</label>
-
-            <input
-              type="number"
-              id="mark_${submissionId}_${questionId}"
-              min="0"
-              max="${maxMark}"
-              step="0.5"
-              value="0"
-            >
+            <label>سبب قبول أو رفض التظلم</label>
+            <textarea id="appealReason_${sid}_${qid}"
+              placeholder="اكتب سبب القرار الذي سيظهر للطالب"></textarea>
 
             <button class="btn"
-              onclick="reviewAppeal('${submissionId}','${questionId}','accept')">
-              قبول التظلم وحفظ الدرجة
+              onclick="reviewAppeal('${sid}','${qid}')">
+              اعتماد القرار
             </button>
-
-            <button class="secondary danger"
-              onclick="reviewAppeal('${submissionId}','${questionId}','reject')">
-              رفض التظلم
-            </button>
-          `;
-        } else {
-          html += `
-            <p class="small">
-              الدرجة المعتمدة: ${Number(appeal.reviewedMark || 0)}
-            </p>
-          `;
-        }
-
-        html += `</div>`;
+          </div>
+        `;
       });
     });
 
     box.innerHTML = html ||
-      '<p class="small">لا توجد تظلمات حتى الآن.</p>';
+      '<p class="good">لا توجد تظلمات معلقة حالياً.</p>';
 
   } catch (error) {
     console.error(error);
@@ -576,118 +875,206 @@ async function loadAppeals() {
       '<p class="small">تعذر تحميل التظلمات. راجع قواعد Firebase.</p>';
   }
 }
-async function reviewAppeal(submissionId, questionId, action) {
-  if (!isAdmin()) return notify("غير مسموح لك بمراجعة التظلمات.");
 
-  if (action !== "accept" && action !== "reject") return;
+/* اعتماد قرار التظلم */
+async function reviewAppeal(submissionId, questionId) {
+  if (!isAdmin()) return notify("غير مسموح لك بمراجعة التظلمات.");
 
   try {
     const appealRef = db.ref(
       "appeals/" + submissionId + "/" + questionId
     );
-
     const appealSnap = await appealRef.once("value");
 
-    if (!appealSnap.exists()) {
-      return notify("التظلم غير موجود.");
-    }
+    if (!appealSnap.exists()) return notify("التظلم غير موجود.");
 
     const appeal = appealSnap.val();
-
-    if (appeal.status !== "pending") {
+    if (appeal.status !== "pending")
       return notify("تمت مراجعة هذا التظلم من قبل.");
-    }
 
-    const keySnap = await db.ref(
-      "answerKeys/" + appeal.examId + "/" + questionId
-    ).once("value");
+    const action = document.getElementById(
+      "appealAction_" + submissionId + "_" + questionId
+    ).value;
 
-    const questionKey = keySnap.val();
+    const reason = document.getElementById(
+      "appealReason_" + submissionId + "_" + questionId
+    ).value.trim();
 
-    if (!questionKey || questionKey.type !== "essay") {
-      return notify("تعذر العثور على بيانات السؤال.");
-    }
+    if (!reason) return notify("اكتب سبب القرار أولاً.");
 
-    const maxMark = Number(appeal.maxMark ?? questionKey.mark ?? 0);
+    let newMark = Number(appeal.oldMark || 0);
 
-    let mark = 0;
+    if (action === "accepted") {
+      newMark = Number(document.getElementById(
+        "appealMark_" + submissionId + "_" + questionId
+      ).value);
 
-    if (action === "accept") {
-      const input = document.getElementById(
-        "mark_" + submissionId + "_" + questionId
-      );
-
-      mark = Number(input?.value);
-
-      if (
-        !Number.isFinite(mark) ||
-        mark < 0 ||
-        mark > maxMark
-      ) {
-        return notify("الدرجة يجب أن تكون بين صفر و" + maxMark);
+      if (!Number.isFinite(newMark) || newMark < 0 ||
+          newMark > Number(appeal.maxMark)) {
+        return notify("الدرجة غير صحيحة.");
       }
     }
 
-    const resultRef = db.ref("results/" + submissionId);
-    const resultSnap = await resultRef.once("value");
+    const resultSnap = await db.ref(
+      "results/" + submissionId
+    ).once("value");
     const result = resultSnap.val() || {};
 
-    const essayScores = {
-      ...(result.essayScores || {})
-    };
+    const essayScores = {...(result.essayScores || {})};
+    const essayReasons = {...(result.essayReasons || {})};
 
-    essayScores[questionId] = mark;
+    if (action === "accepted") {
+      essayScores[questionId] = newMark;
+      essayReasons[questionId] = reason;
+    }
 
-    const newEssayScore = Object.values(essayScores).reduce(
-      (sum, value) => sum + Number(value || 0),
-      0
+    const essayScore = Object.values(essayScores).reduce(
+      (sum, n) => sum + Number(n || 0), 0
     );
 
-    const newTotalScore =
-      Number(result.mcqScore || 0) + newEssayScore;
-
     const updates = {};
+    updates["appeals/" + submissionId + "/" + questionId] = {
+      ...appeal,
+      status: action,
+      reviewedMark: newMark,
+      adminReason: reason,
+      reviewedAt: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    updates["results/" + submissionId + "/essayScores"] = essayScores;
+    updates["results/" + submissionId + "/essayReasons"] = essayReasons;
+    updates["results/" + submissionId + "/essayScore"] = essayScore;
+    updates["results/" + submissionId + "/score"] =
+      Number(result.mcqScore || 0) + essayScore;
 
     updates[
-      "appeals/" + submissionId + "/" + questionId + "/status"
-    ] = action === "accept" ? "accepted" : "rejected";
-
-    updates[
-      "appeals/" + submissionId + "/" + questionId + "/reviewedMark"
-    ] = mark;
-
-    updates[
-      "appeals/" + submissionId + "/" + questionId + "/reviewedAt"
-    ] = firebase.database.ServerValue.TIMESTAMP;
-
-    updates[
-      "results/" + submissionId + "/essayScores"
-    ] = essayScores;
-
-    updates[
-      "results/" + submissionId + "/essayScore"
-    ] = newEssayScore;
-
-    updates[
-      "results/" + submissionId + "/score"
-    ] = newTotalScore;
+      "appealDecisions/" + appeal.studentUid + "/" +
+      submissionId + "/" + questionId
+    ] = {
+      status: action,
+      mark: newMark,
+      reason,
+      reviewedAt: firebase.database.ServerValue.TIMESTAMP
+    };
 
     await db.ref().update(updates);
 
-    notify(
-      action === "accept"
-        ? "تم قبول التظلم وتحديث الدرجة بنجاح 💙"
-        : "تم رفض التظلم."
-    );
+    notify(action === "accepted"
+      ? "تم قبول التظلم وتحديث الدرجة."
+      : "تم رفض التظلم.");
 
-    await Promise.all([
-      loadAppeals(),
-      loadResults()
-    ]);
+    await Promise.all([loadAppeals(), loadResults()]);
 
   } catch (error) {
     console.error(error);
-    notify("حدث خطأ أثناء المراجعة. راجع قواعد Firebase.");
+    notify("حدث خطأ أثناء مراجعة التظلم.");
+  }
+}
+
+/* الطالب يفتح مراجعاته */
+async function openMyReviews() {
+  try {
+    await ensureStudentAuth();
+    showPage("myReviews");
+
+    const box = document.getElementById("myReviewsList");
+    box.innerHTML = '<p class="small">جارٍ تحميل مراجعاتك...</p>';
+
+    const uid = auth.currentUser.uid;
+
+    const [reviewsSnap, appealsSnap] = await Promise.all([
+      db.ref("studentReviews/" + uid).once("value"),
+      db.ref("appealDecisions/" + uid).once("value")
+    ]);
+
+    if (!reviewsSnap.exists()) {
+      box.innerHTML = `
+        <p class="pending">
+          لا توجد مراجعات منشورة حتى الآن. ستظهر هنا بعد تحديث الأدمن للنتائج.
+        </p>
+      `;
+      return;
+    }
+
+    const decisions = appealsSnap.val() || {};
+    let html = "";
+
+    reviewsSnap.forEach(subSnap => {
+      const review = subSnap.val();
+      const sid = subSnap.key;
+      if (!review) return;
+
+      html += `
+        <div class="item">
+          <h3>${esc(review.examName || "اختبار")}</h3>
+          <p class="small">الطالب: ${esc(review.studentName || "")}</p>
+          <p class="small">درجة الاختياري: ${Number(review.mcqScore || 0)}</p>
+          <p class="small">درجة المقالي: ${Number(review.essayScore || 0)}</p>
+          <p class="small">الإجابات الصحيحة: ${Number(review.correctCount || 0)}
+            | الخاطئة: ${Number(review.wrongCount || 0)}</p>
+          ${
+            review.allGraded
+              ? `<div class="good">النتيجة النهائية: ${Number(review.score || 0)} / ${Number(review.total || 0)}</div>`
+              : `<div class="pending">النتيجة مؤقتة، توجد أسئلة مقالية تنتظر التصحيح.</div>`
+          }
+      `;
+
+      (review.questions || []).forEach(q => {
+        html += `
+          <div class="item">
+            <b>السؤال:</b>
+            <p>${esc(q.text)}</p>
+            <p><b>إجابتك:</b></p>
+            <p>${esc(q.studentAnswer || "")}</p>
+        `;
+
+        if (q.type === "mcq") {
+          html += `
+            <div class="bad">إجابة غير صحيحة</div>
+            <p><b>الإجابة الصحيحة:</b> ${esc(q.correctAnswer)}</p>
+            <p><b>التفسير:</b> ${esc(q.explanation)}</p>
+            <p class="small">الدرجة: صفر / ${Number(q.mark)}</p>
+          `;
+        } else {
+          html += `
+            <p class="small">الدرجة: ${Number(q.awarded || 0)} / ${Number(q.mark)}</p>
+            <p><b>ملاحظات التصحيح:</b></p>
+            <p>${esc(q.reason || "لا توجد ملاحظات.")}</p>
+            <p><b>الإجابة النموذجية:</b></p>
+            <p>${esc(q.modelAnswer || "لا توجد إجابة نموذجية.")}</p>
+          `;
+
+          const decision = decisions[sid]?.[q.id];
+
+          if (decision) {
+            html += `
+              <div class="${decision.status === "accepted" ? "good" : "bad"}">
+                التظلم: ${decision.status === "accepted" ? "مقبول" : "مرفوض"}
+                <br>الدرجة المعتمدة: ${Number(decision.mark || 0)}
+                <br>سبب القرار: ${esc(decision.reason || "")}
+              </div>
+            `;
+          } else if (q.awarded !== undefined) {
+            html += `
+              <button class="secondary" onclick="sendAppeal('${sid}','${q.id}')">
+                تقديم تظلم على التصحيح
+              </button>
+            `;
+          }
+        }
+
+        html += `</div>`;
+      });
+
+      html += `</div>`;
+    });
+
+    box.innerHTML = html;
+
+  } catch (error) {
+    console.error(error);
+    document.getElementById("myReviewsList").innerHTML =
+      '<p class="small">تعذر تحميل مراجعاتك. تحقق من قواعد Firebase.</p>';
   }
 }
 </script>
