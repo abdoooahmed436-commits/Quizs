@@ -127,7 +127,7 @@
             </header>
             <div class="flex gap-2 bg-cardBg p-1.5 rounded-2xl border border-slate-200 shadow-sm">
                 <button type="button" onclick="switchStudentPanel('availableExams')" id="btnAvailableExams" class="flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition shadow-sm">الاختبارات المتاحة</button>
-                <button type="button" onclick="switchStudentPanel('studentResults')" id="btnStudentResults" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 transition">نتائجي ومراجعة الإجابات</button>
+                <button type="button" onclick="switchStudentPanel('studentResults')" id="btnStudentResults" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 transition">نتائجي والتحليلات</button>
             </div>
             <div id="panelAvailableExams" class="space-y-4">
                 <h3 class="text-base font-bold text-slate-800">الاختبارات الجاهزة للحل</h3>
@@ -154,12 +154,12 @@
             </form>
         </section>
 
-        <!-- شاشة مراجعة النتيجة التفصيلية للطالب -->
+        <!-- شاشة مراجعة النتيجة والإحصائيات المفصلة للطالب -->
         <section id="studentReviewScreen" class="hidden-section space-y-6">
             <header class="flex justify-between items-center bg-cardBg p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
-                    <h2 class="text-lg font-bold text-slate-900">مراجعة إجابات الاختبار</h2>
-                    <p id="reviewExamTitle" class="text-xs text-slate-500">تفاصيل الدرجات وأخطاء الأسئلة</p>
+                    <h2 class="text-lg font-bold text-slate-900">تقرير النتيجة المفصل</h2>
+                    <p id="reviewExamTitle" class="text-xs text-slate-500">تحليل الأخطاء وإجابات الأسئلة</p>
                 </div>
                 <button type="button" onclick="showSection('studentDashboard'); switchStudentPanel('studentResults');" class="px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold rounded-xl transition">العودة للنتائج ⟵</button>
             </header>
@@ -171,7 +171,7 @@
             <header class="flex justify-between items-center bg-cardBg p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
                     <h2 class="text-lg font-bold text-slate-900">لوحة تحكم الأدمن</h2>
-                    <p class="text-xs text-red-600 font-bold">إدارة النظام والاختبارات والتصحيح (بدون زحمة)</p>
+                    <p class="text-xs text-red-600 font-bold">إدارة النظام والاختبارات والتصحيح</p>
                 </div>
                 <button type="button" onclick="logoutUser()" class="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition border border-red-200">خروج</button>
             </header>
@@ -750,7 +750,6 @@
                     });
                 }
 
-                // جلب اسم الطالب للأمان ولعرضه بدلاً من الإيميل
                 const userSnap = await get(ref(db, `qm2Users/${currentUser.uid}`));
                 const studentName = userSnap.exists() ? userSnap.val().name : "طالب";
 
@@ -764,6 +763,8 @@
                     mcqScore: Number(mcqScore),
                     totalMcqPossible: Number(totalMcqPossible),
                     essayGraded: !hasEssay,
+                    essayScores: {}, // لتخزين درجات المقالي لكل سؤال على حدة
+                    essayFeedbacks: {}, // لتخزين ملاحظات المقالي لكل سؤال على حدة
                     essayScore: 0,
                     feedback: "",
                     status: hasEssay ? "في انتظار التصحيح" : "تم التصحيح",
@@ -785,30 +786,48 @@
 
         window.loadStudentResults = async function() {
             const subsSnap = await get(ref(db, 'qm2Submissions'));
+            const examsSnap = await get(ref(db, 'qm2Exams'));
             const listEl = document.getElementById('studentResultsList');
             if(!listEl) return;
             listEl.innerHTML = '';
 
-            if(!subsSnap.exists()) {
+            if(!subsSnap.exists() || !examsSnap.exists()) {
                 listEl.innerHTML = '<p class="text-xs text-slate-400">ليس لديك اختبارات مسجلة بعد.</p>';
                 return;
             }
 
-            subsSnap.forEach(childSnap => {
+            const exams = examsSnap.val();
+
+                        subsSnap.forEach(childSnap => {
                 const sub = childSnap.val();
                 const subId = childSnap.key;
                 if(sub.studentId === currentUser.uid) {
-                                    const finalTotal = sub.mcqScore + (sub.essayScore || 0);
+                    const exam = exams[sub.examId] || { questions: [] };
+                    
+                    let totalPossible = 0;
+                    exam.questions.forEach(q => totalPossible += Number(q.degree || 0));
+                    
+                    const finalTotal = sub.mcqScore + (sub.essayScore || 0);
+                    const percentage = totalPossible > 0 ? Math.round((finalTotal / totalPossible) * 100) : 0;
+
+                    const isFullyGraded = (sub.status === 'تم التصحيح');
+
                     listEl.innerHTML += `
-                        <div class="p-4 bg-cardBg rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                        <div class="p-5 bg-cardBg rounded-2xl border border-slate-200 shadow-sm space-y-3">
                             <div class="flex justify-between items-center">
                                 <h4 class="font-bold text-sm text-slate-900">${sub.examTitle}</h4>
-                                <span class="px-3 py-1 text-xs font-bold rounded-xl ${sub.status === 'تم التصحيح' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200'}">${sub.status}</span>
+                                <span class="px-3 py-1 text-xs font-bold rounded-xl ${isFullyGraded ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200'}">${sub.status}</span>
                             </div>
-                            <p class="text-xs text-slate-500">درجة الاختيار من متعدد: ${sub.mcqScore} | درجة المقالي: ${sub.essayScore || 0}</p>
-                            <p class="text-xs font-bold text-blue-600">الدرجة النهائية الكلية: ${finalTotal}</p>
-                            ${sub.feedback ? `<p class="text-xs text-purple-700 mt-2 bg-purple-50 p-2.5 rounded-xl border border-purple-200">ملاحظات الأدمن: ${sub.feedback}</p>` : ''}
-                            <button type="button" onclick="openStudentReview('${sub.examId}', '${subId}')" class="mt-2 w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition">مراجعة الأسئلة والأخطاء 🔍</button>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 py-2 bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs text-center font-bold">
+                                <div>الدرجة الكلية: <span class="text-blue-600">${finalTotal} / ${totalPossible}</span></div>
+                                <div>النسبة المئوية: <span class="text-purple-600">${percentage}%</span></div>
+                                <div>اختيار متعدد: <span class="text-emerald-600">${sub.mcqScore}</span></div>
+                                <div>المقالي: <span class="text-amber-600">${sub.essayScore || 0}</span></div>
+                            </div>
+                            ${isFullyGraded ? 
+                                `<button type="button" onclick="openStudentReview('${sub.examId}', '${subId}')" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-sm">مراجعة الإجابات والأخطاء وتفاصيل الدرجات 🔍</button>` :
+                                `<p class="text-xs text-amber-700 bg-amber-50 p-2.5 rounded-xl border border-amber-200 text-center font-bold">⏳ جارٍ تصحيح الأسئلة المقالية من قِبل الأدمن.. ستظهر تفاصيل الأخطاء والإجابات الصحيحة فور الانتهاء.</p>`
+                            }
                         </div>
                     `;
                 }
@@ -826,9 +845,35 @@
             const answerKeys = keysSnap.exists() ? keysSnap.val() : {};
             const sub = subSnap.val();
 
-            document.getElementById('reviewExamTitle').textContent = `مراجعة اختبار: ${exam.title}`;
+            document.getElementById('reviewExamTitle').textContent = `تقرير اختبار: ${exam.title}`;
             const container = document.getElementById('studentReviewContainer');
             container.innerHTML = '';
+
+            let correctMCQ = 0;
+            let wrongMCQ = 0;
+            let unAnswered = 0;
+
+            exam.questions.forEach((q, idx) => {
+                let studentAns = sub.studentAnswers[idx];
+                if(q.type === 'mcq') {
+                    let correctIdx = answerKeys[idx] ? answerKeys[idx].correctIndex : null;
+                    if(studentAns === null || studentAns === undefined || studentAns === "") unAnswered++;
+                    else if(studentAns === correctIdx) correctMCQ++;
+                    else wrongMCQ++;
+                } else {
+                    if(!studentAns || studentAns.trim() === "") unAnswered++;
+                }
+            });
+
+            let totalQ = exam.questions.length;
+            container.innerHTML += `
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-cardBg p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl"><div class="text-xs text-slate-500">إجمالي الأسئلة</div><div class="text-lg font-black text-blue-600">${totalQ}</div></div>
+                    <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-xl"><div class="text-xs text-slate-500">إجابات صحيحة (MCQ)</div><div class="text-lg font-black text-emerald-600">${correctMCQ}</div></div>
+                    <div class="p-3 bg-red-50 border border-red-100 rounded-xl"><div class="text-xs text-slate-500">إجابات خاطئة (MCQ)</div><div class="text-lg font-black text-red-600">${wrongMCQ}</div></div>
+                    <div class="p-3 bg-amber-50 border border-amber-100 rounded-xl"><div class="text-xs text-slate-500">غير محلولة / مقالي</div><div class="text-lg font-black text-amber-600">${unAnswered}</div></div>
+                </div>
+            `;
 
             exam.questions.forEach((q, idx) => {
                 let studentAns = sub.studentAnswers[idx];
@@ -854,10 +899,16 @@
                         </div>
                     `;
                 } else {
+                    let essayScore = (sub.essayScores && sub.essayScores[idx] !== undefined) ? sub.essayScores[idx] : 0;
+                    let essayFeedback = (sub.essayFeedbacks && sub.essayFeedbacks[idx]) ? sub.essayFeedbacks[idx] : (sub.feedback || "لا توجد ملاحظات");
+
                     questionResultHtml = `
                         <div class="space-y-2 mt-2">
                             <p class="text-xs text-blue-700 bg-white p-2.5 rounded-xl border border-slate-200"><b>إجابتك المقالية:</b> ${studentAns || 'لم يجب'}</p>
-                            <p class="text-xs text-purple-700 bg-purple-50 p-2 rounded-xl border border-purple-200">درجة المقالي الممنوحة: ${sub.essayScore || 0} من ${q.degree}</p>
+                            <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 space-y-1">
+                                <p class="text-xs font-bold text-purple-900">درجة هذا السؤال: <span class="text-purple-600">${essayScore}</span> من ${q.degree}</p>
+                                <p class="text-xs text-purple-800"><b>ملاحظة الأدمن على السؤال:</b> ${essayFeedback}</p>
+                            </div>
                         </div>
                     `;
                 }
@@ -901,34 +952,36 @@
                     const exam = exams[sub.examId] || { questions: [] };
 
                     let answersReviewHtml = '';
-                    for(let qIdx in sub.studentAnswers) {
-                        let qObj = exam.questions[qIdx] || {};
-                        let studentAns = sub.studentAnswers[qIdx];
-                        if(qObj.type === 'essay') {
+                    exam.questions.forEach((q, idx) => {
+                        if(q.type === 'essay') {
+                            let studentAns = sub.studentAnswers[idx];
+                            let currentEssayScore = (sub.essayScores && sub.essayScores[idx] !== undefined) ? sub.essayScores[idx] : 0;
+                            let currentEssayFeedback = (sub.essayFeedbacks && sub.essayFeedbacks[idx]) ? sub.essayFeedbacks[idx] : '';
+
                             answersReviewHtml += `
-                                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                                    <p class="text-xs text-slate-700"><b>سؤال مقالي (${qObj.degree} درجات):</b> ${qObj.text}</p>
-                                    <p class="text-xs text-blue-700 bg-white p-2.5 rounded-xl border border-slate-200"><b>إجابة الطالب:</b> ${studentAns || 'لم يجب'}</p>
+                                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                    <p class="text-xs text-slate-900 font-bold"><b>سؤال مقالي (${q.degree} درجات):</b> ${q.text}</p>
+                                    <p class="text-xs text-blue-700 bg-white p-3 rounded-xl border border-slate-200"><b>إجابة الطالب:</b> ${studentAns || 'لم يجب'}</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1">
+                                        <input type="number" id="essay_score_${subId}_${idx}" placeholder="الدرجة (من ${q.degree})" value="${currentEssayScore}" class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
+                                        <input type="text" id="essay_feedback_${subId}_${idx}" placeholder="ملاحظة الأدمن على هذا السؤال" value="${currentEssayFeedback}" class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
+                                    </div>
                                 </div>
                             `;
                         }
-                    }
+                    });
 
                     listEl.innerHTML += `
                         <div class="p-5 bg-cardBg rounded-3xl border border-slate-200 shadow-sm space-y-4">
                             <div class="flex justify-between items-center">
                                 <div>
                                     <h4 class="font-bold text-sm text-slate-900">الطالب: ${sub.studentName || 'مجهول'}</h4>
-                                    <p class="text-xs text-slate-500">الاختبار: ${sub.examTitle} | MCQ: ${sub.mcqScore}</p>
+                                    <p class="text-xs text-slate-500">الاختبار: ${sub.examTitle} | درجة MCQ: ${sub.mcqScore}</p>
                                 </div>
                                 <span class="text-xs px-3 py-1 bg-amber-50 text-amber-600 rounded-xl border border-amber-200 font-bold">${sub.status}</span>
                             </div>
                             <div class="space-y-3">${answersReviewHtml}</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
-                                <input type="number" id="grade_${subId}" placeholder="درجة الأسئلة المقالية" value="${sub.essayScore || 0}" class="px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                                <input type="text" id="feedback_${subId}" placeholder="ملاحظات الأدمن" value="${sub.feedback || ''}" class="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                            </div>
-                            <button type="button" onclick="saveAdminGrading('${subId}')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition">حفظ التصحيح وإرسال النتيجة للطالب</button>
+                            <button type="button" onclick="saveAdminGrading('${subId}', '${sub.examId}')" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition">حفظ تصحيح الأسئلة المقالية واعتماد النتيجة للطالب</button>
                         </div>
                     `;
                 }
@@ -939,18 +992,38 @@
             }
         }
 
-        window.saveAdminGrading = async function(subId) {
-            const essayScore = Number(document.getElementById(`grade_${subId}`).value);
-            const feedback = document.getElementById(`feedback_${subId}`).value;
+        window.saveAdminGrading = async function(subId, examId) {
+            const examSnap = await get(ref(db, `qm2Exams/${examId}`));
+            if(!examSnap.exists()) return;
+            const exam = examSnap.val();
+
+            let essayScores = {};
+            let essayFeedbacks = {};
+            let totalEssayScore = 0;
+
+            exam.questions.forEach((q, idx) => {
+                if(q.type === 'essay') {
+                    const scoreInput = document.getElementById(`essay_score_${subId}_${idx}`);
+                    const feedbackInput = document.getElementById(`essay_feedback_${subId}_${idx}`);
+                    
+                    let score = scoreInput ? Number(scoreInput.value) : 0;
+                    let feedback = feedbackInput ? feedbackInput.value : "";
+
+                    essayScores[idx] = score;
+                    essayFeedbacks[idx] = feedback;
+                    totalEssayScore += score;
+                }
+            });
 
             await update(ref(db, `qm2Submissions/${subId}`), {
-                essayScore,
-                feedback,
+                essayScores: essayScores,
+                essayFeedbacks: essayFeedbacks,
+                essayScore: totalEssayScore,
                 essayGraded: true,
                 status: "تم التصحيح"
             });
 
-            showToast("تم حفظ التصحيح وإرسال النتيجة للطالب بنجاح!");
+            showToast("تم حفظ التصحيح وتحديث النتيجة للطالب بنجاح!");
             loadAdminSubmissions();
         }
     </script>
